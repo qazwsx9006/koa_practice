@@ -6,6 +6,7 @@ const bodyParser = require('koa-bodyparser');
 const views = require('koa-views');
 const json = require('koa-json');
 const c2k = require('koa-connect');
+const staticServer = require('koa-static')
 const fs = require('fs');
 
 // line bot
@@ -17,10 +18,6 @@ const client = new line.Client(config.Line);
 const app = new Koa();
 const router = new Router();
 
-// Router -> /
-router.get('/', async(ctx) => {
-  ctx.body = { foo: 'bar' }
-});
 // Router -> /about
 router.get('/about', async(ctx) => {
     ctx.body = 'About Me';
@@ -46,6 +43,7 @@ router.post('/login', async(ctx) => {
     ctx.body = `<p>Welocome,${usr}!</p>`;
 });
 
+// middleware for verify request
 router.use('/webhook', async(ctx, next) => {
   let res = ctx.request;
   let body = res.body;
@@ -61,7 +59,27 @@ router.use('/webhook', async(ctx, next) => {
 });
 
 router.post('/webhook' , async(ctx) => {
+  let res = ctx.request;
+  let event = res.body.events[0];
 
+  if(event.type === 'message'){
+    var message = event.message;
+    if(message.type === 'text' && message.text === 'Mingyu bye'){
+      if (event.source.type === 'room') {
+        client.leaveRoom(event.source.roomId);
+      } else if (event.source.type === 'group') {
+        client.leaveGroup(event.source.groupId);
+      } else {
+        client.replyMessage(event.replyToken, {
+          type: 'text',
+          text: '不要叫我走ＱＱ',
+        });
+      }
+
+    }
+  }
+
+  client.pushMessage(userId, { type: 'text', text: 'hello, world' });
   ctx.body = {a: 1}
 });
 
@@ -71,6 +89,8 @@ app.use(logger());
 
 app.use(json())
 
+app.use(staticServer(__dirname+'/static/'));
+
 app.use(views(__dirname, {
     extension: 'ejs'
 }));
@@ -79,7 +99,7 @@ app.use(bodyParser());
 
 app.use(router.routes());
 
-app.listen(3001);
+app.listen(80);
 
 console.log('start app at port 3001')
 if(!config.DevelopEnv){
