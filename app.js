@@ -8,7 +8,11 @@ const router = new Router();
 
 // Router -> /
 router.get('/', async(ctx) => {
-    ctx.body = 'Hello World';
+    // 取的url params
+      let name = ctx.query.name;
+      console.log('name', name);
+    //
+    ctx.body = `Hello! ${name}`;
 });
 
 // Router -> /about
