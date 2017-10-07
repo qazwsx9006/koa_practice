@@ -11,8 +11,7 @@ const fs = require('fs');
 // line bot
 const line = require('@line/bot-sdk');
 const config = require('./config');
-const lineConfig = config.Line;
-const client = new line.Client(lineConfig);
+const client = new line.Client(config.Line);
 // line bot
 
 const app = new Koa();
@@ -20,25 +19,8 @@ const router = new Router();
 
 // Router -> /
 router.get('/', async(ctx) => {
-
-    // console.log(ctx)
-    // return client.replyMessage(event.replyToken, {
-    //   type: 'text',
-    //   text: event.message.text
-    // });
   ctx.body = { foo: 'bar' }
-    // 取的url params
-      // let name = ctx.query.name;
-      // console.log('name', name);
-    //
-
-    // await：由於載入需要時間讀取，因此我們使用 await 等待載入結束。
-    // 如果不使用 await，則會發現讀取不到檔案無法顯示畫面。
-    // await ctx.render('views/index', {
-    //   title: 'MMM'
-    // })
 });
-
 // Router -> /about
 router.get('/about', async(ctx) => {
     ctx.body = 'About Me';
@@ -65,30 +47,27 @@ router.post('/login', async(ctx) => {
 });
 
 router.use('/webhook', async(ctx, next) => {
-  // console.log(ctx.request)
-  // console.log(ctx.response)
   let res = ctx.request;
   let body = res.body;
   let signature = res.headers['x-line-signature'];
-  // console.log(body);
-  // console.log(JSON.stringify(body));
-  let a = line.validateSignature(body, lineConfig.channelSecret, signature);
-  console.log(a);
 
-  console.log('middle')
-  next();
+  if(line.validateSignature(JSON.stringify(body), lineConfig.channelSecret, signature)){
+    ctx.status = 200;
+    next();
+  }else{
+    ctx.body = 'Unauthorized! Channel Serect and Request header aren\'t the same.';
+    ctx.status = 401;
+  }
 });
 
 router.post('/webhook' , async(ctx) => {
-  // console.log(ctx)
-  console.log('post')
+
   ctx.body = {a: 1}
 });
 
 
 // 以下順序有關聯，順序不同可能造成錯誤
 app.use(logger());
-
 
 app.use(json())
 
@@ -103,12 +82,13 @@ app.use(router.routes());
 app.listen(3001);
 
 console.log('start app at port 3001')
-
-// const options = {
-//     key: fs.readFileSync('/etc/letsencrypt/live/$your-domain/privkey.pem', 'utf8'),
-//     cert: fs.readFileSync('/etc/letsencrypt/live/$your-domain/cert.pem', 'utf8')
-// };
-// https.createServer(options, app.callback()).listen(443);
+if(!config.DevelopEnv){
+  const options = {
+      key: fs.readFileSync(config.SSL.key, 'utf8'),
+      cert: fs.readFileSync(config.SSL.cert, 'utf8')
+  };
+  https.createServer(options, app.callback()).listen(443);
+}
 
 // koa-routes & koa-view 有順序問題。參考如下
 // 由于koa-views中间件结构
