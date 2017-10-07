@@ -51,7 +51,7 @@ router.use('/webhook', async(ctx, next) => {
   let body = res.body;
   let signature = res.headers['x-line-signature'];
 
-  if(line.validateSignature(JSON.stringify(body), lineConfig.channelSecret, signature)){
+  if(line.validateSignature(JSON.stringify(body), config.Line.channelSecret, signature)){
     ctx.status = 200;
     next();
   }else{
