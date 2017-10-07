@@ -55,15 +55,14 @@ app.use(views(__dirname, {
     extension: 'ejs'
 }));
 
-app.use(router.routes());
-
 app.use(bodyParser());
 
+app.use(router.routes());
 
 app.listen(3001);
 
 
-// koa-routes & koa-view 有順序問提。參考如下
+// koa-routes & koa-view 有順序問題。參考如下
 // 由于koa-views中间件结构
 
 // module.exports = viewsMiddleware
@@ -78,3 +77,5 @@ app.listen(3001);
 // 先get,post路由处理，然后再处理返回的views函数的话，因为那时还没有添加这个方法
 // 所以报出了出现的ctx.render is not function问题。
 // koa-routes & koa-view 有順序問提。參考如上
+
+// bodyParser 也需要在 router 之前。 原因應該同上。
