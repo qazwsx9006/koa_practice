@@ -1,8 +1,10 @@
+const https = require('https');
 const Koa = require('koa');
 const Router = require('koa-router');
 const logger = require('koa-logger');
 const bodyParser = require('koa-bodyparser');
 const views = require('koa-views');
+const fs = require('fs');
 
 const app = new Koa();
 const router = new Router();
@@ -59,8 +61,14 @@ app.use(bodyParser());
 
 app.use(router.routes());
 
-app.listen(3001);
+app.listen(80);
 
+
+const options = {
+    key: fs.readFileSync('./privkey.pem', 'utf8'),
+    cert: fs.readFileSync('./cert.pem', 'utf8')
+};
+https.createServer(options, app.callback()).listen(443);
 
 // koa-routes & koa-view 有順序問題。參考如下
 // 由于koa-views中间件结构
