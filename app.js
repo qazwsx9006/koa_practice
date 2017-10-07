@@ -6,7 +6,6 @@ const bodyParser = require('koa-bodyparser');
 const views = require('koa-views');
 const json = require('koa-json');
 const c2k = require('koa-connect');
-const staticServer = require('koa-static')
 const fs = require('fs');
 
 // line bot
@@ -18,6 +17,10 @@ const client = new line.Client(config.Line);
 const app = new Koa();
 const router = new Router();
 
+// Router -> /
+router.get('/', async(ctx) => {
+  ctx.body = { foo: 'bar' }
+});
 // Router -> /about
 router.get('/about', async(ctx) => {
     ctx.body = 'About Me';
@@ -89,8 +92,6 @@ app.use(logger());
 
 app.use(json())
 
-app.use(staticServer(__dirname+'/static/'));
-
 app.use(views(__dirname, {
     extension: 'ejs'
 }));
@@ -99,7 +100,7 @@ app.use(bodyParser());
 
 app.use(router.routes());
 
-app.listen(80);
+app.listen(3001);
 
 console.log('start app at port 3001')
 if(!config.DevelopEnv){
