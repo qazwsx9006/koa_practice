@@ -67,23 +67,32 @@ router.post('/webhook' , async(ctx) => {
 
   if(event.type === 'message'){
     var message = event.message;
-    if(message.type === 'text' && message.text === 'Mingyu bye'){
-      if (event.source.type === 'room') {
-        client.leaveRoom(event.source.roomId);
-      } else if (event.source.type === 'group') {
-        client.leaveGroup(event.source.groupId);
-      } else {
+    // 文字訊息
+    if(message.type === 'text'){
+      // 離開指令
+      if(message.text === 'Mingyu bye'){
+        if (event.source.type === 'room') {
+          client.leaveRoom(event.source.roomId);
+        } else if (event.source.type === 'group') {
+          client.leaveGroup(event.source.groupId);
+        } else {
+          client.replyMessage(event.replyToken, {
+            type: 'text',
+            text: '不要叫我走ＱＱ',
+          });
+        }
+      }else if(message.text === 'Hi'){
         client.replyMessage(event.replyToken, {
           type: 'text',
-          text: '不要叫我走ＱＱ',
+          text: 'Hello!!',
         });
       }
 
     }
   }
 
-  client.pushMessage(userId, { type: 'text', text: 'hello, world' });
-  ctx.body = {a: 1}
+  // client.pushMessage(userId, { type: 'text', text: 'hello, world' });
+  ctx.body = 'success'
 });
 
 
@@ -100,7 +109,7 @@ app.use(bodyParser());
 
 app.use(router.routes());
 
-app.listen(3001);
+app.listen(80);
 
 console.log('start app at port 3001')
 if(!config.DevelopEnv){
