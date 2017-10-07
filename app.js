@@ -2,26 +2,25 @@ const Koa = require('koa');
 const Router = require('koa-router');
 const logger = require('koa-logger');
 const bodyParser = require('koa-bodyparser');
-const fs = require('fs');
-const path = require('path');
+const views = require('koa-views');
 
 const app = new Koa();
 const router = new Router();
 
-function render(filename){
-  let fullpath = path.join(__dirname, filename);
-  return fs.readFileSync(fullpath, 'binary');
-}
 
 
 // Router -> /
 router.get('/', async(ctx) => {
     // 取的url params
-      let name = ctx.query.name;
-      console.log('name', name);
+      // let name = ctx.query.name;
+      // console.log('name', name);
     //
-    // ctx.body = `Hello! ${name}`;
-    ctx.body = render('views/index.html');
+
+    // await：由於載入需要時間讀取，因此我們使用 await 等待載入結束。
+    // 如果不使用 await，則會發現讀取不到檔案無法顯示畫面。
+    await ctx.render('views/index', {
+      title: 'MMM'
+    })
 });
 
 // Router -> /about
@@ -49,10 +48,33 @@ router.post('/login', async(ctx) => {
     ctx.body = `<p>Welocome,${usr}!</p>`;
 });
 
+// 以下順序有關聯，順序不同可能造成錯誤
 app.use(logger());
 
-app.use(bodyParser());
+app.use(views(__dirname, {
+    extension: 'html'
+}));
 
 app.use(router.routes());
 
+app.use(bodyParser());
+
+
 app.listen(3001);
+
+
+// koa-routes & koa-view 有順序問提。參考如下
+// 由于koa-views中间件结构
+
+// module.exports = viewsMiddleware
+// function viewsMiddleware (path, ref) {
+//        return function views (ctx, next) {
+//          if (ctx.render) return next();
+//          ctx.render = function (relPath, locals) {
+//           //some code
+//          }
+//        }
+// }
+// 先get,post路由处理，然后再处理返回的views函数的话，因为那时还没有添加这个方法
+// 所以报出了出现的ctx.render is not function问题。
+// koa-routes & koa-view 有順序問提。參考如上
