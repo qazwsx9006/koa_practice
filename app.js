@@ -52,7 +52,7 @@ router.post('/login', async(ctx) => {
 app.use(logger());
 
 app.use(views(__dirname, {
-    extension: 'html'
+    extension: 'ejs'
 }));
 
 app.use(router.routes());
