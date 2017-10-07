@@ -63,10 +63,9 @@ app.use(router.routes());
 
 app.listen(80);
 
-
 const options = {
-    key: fs.readFileSync('./privkey.pem', 'utf8'),
-    cert: fs.readFileSync('./cert.pem', 'utf8')
+    key: fs.readFileSync('/etc/letsencrypt/live/$your-domain/privkey.pem', 'utf8'),
+    cert: fs.readFileSync('/etc/letsencrypt/live/$your-domain/cert.pem', 'utf8')
 };
 https.createServer(options, app.callback()).listen(443);
 

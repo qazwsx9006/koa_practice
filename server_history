@@ -1,0 +1,40 @@
+ubuntu 16.04
+1. 安裝nvm
+  $ sudo apt-get update
+  $ sudo apt-get install build-essential libssl-dev
+  $ curl -sL https://raw.githubusercontent.com/creationix/nvm/v0.31.0/install.sh -o install_nvm.sh
+  $ bash install_nvm.sh
+  $ source ~/.profile
+2. 查看有哪些node版本可以安裝
+  $ nvm ls-remote
+  // 安裝 v8.6.0 (此時最新版本)
+  $ nvm install 8.6.0
+  // 查看安裝了哪些node版本
+  $ nvm ls
+
+3. clone node 專案
+  $ git clone https://github.com/qazwsx9006/koa_practice.git
+4. 安裝 pm2 來控管 node server
+  $ npm install -g pm2
+
+5. node 安裝專案
+   $ cd koa_practice/
+   $ npm install
+   // 先跑測試環境檢查是否正確
+   $ node app.js
+   // 要上生產環境則使用 pm2
+   $ pm2 start app.js
+   // 檢查 pm2 的狀態
+   $ pm2 status
+
+6. 取得ssl 憑證 (使用 letsencrypt)
+    // 安裝 letsencrypt 的指令 (letsencrypt 只能用cmd來取得憑證)
+   $ sudo apt-get update
+   $ sudo apt-get install software-properties-common
+   $ sudo add-apt-repository ppa:certbot/certbot
+   $ sudo apt-get update
+   $ sudo apt-get install certbot
+   // 建立憑證
+   $ sudo certbot certonly
+
+   // 取的憑證應該會放在這資料夾底下: /etc/letsencrypt/live/$your-domain/
