@@ -3,14 +3,14 @@ module.exports = {
     regexp: /^(Hi|嗨|哈囉)$/i,
     reply: {
       type: 'text',
-      msg: ['Hello $USER_NAME$~','嗨', '哈囉']
+      msg: ['Hello $USER_NAME$~','嗨 $USER_NAME$!', '哈囉']
     }
   },
   callMe:{
     regexp: /^MingyuBot$/i,
     reply: {
       type: 'text',
-      msg: "Hi 我是 MingyuBot, 我的指令目前有\n 1. Hi, 2. MingyuBot 3. Mingyu bye"
+      msg: "Hi 我是 MingyuBot, 我的指令目前有\n1. Hi,\n2. MingyuBot\n3. Mingyu bye"
     }
 
   },

@@ -110,9 +110,9 @@ class LineAction {
     }
   }
 
-  replyMessage(reply){
+  async replyMessage(reply){
     let text = Array.isArray(reply.msg) ? reply.msg[Math.floor(Math.random() * reply.msg.length)] : reply.msg ;
-    let new_text = this.replaceKeyword(text);
+    let new_text = await this.replaceKeyword(text);
 
     client.replyMessage(this.event.replyToken, {
       type: reply.type,
