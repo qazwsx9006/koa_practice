@@ -111,36 +111,34 @@ class LineAction {
 
   replyMessage(event, reply){
     let text = Array.isArray(reply.msg) ? reply.msg[Math.floor(Math.random() * reply.msg.length)] : reply.msg ;
-    let r = this.getProfile(event);
-    console.log('r', r);
 
     client.replyMessage(event.replyToken, {
       type: reply.type,
-      text: text,
+      text: this.replaceKeyword(text),
     });
   }
 
+  async replaceKeyword(text){
+    if(text.indexOf('$USER_NAME$') >= 0 ){
+      let profile = await this.getProfile(event);
+      // profile = {
+      //   userId: 'xxxxx',
+      //   displayName: 'mingyu',
+      //   pictureUrl: 'http://wwww.www',
+      //   statusMessage: 'status xxx'
+      // }
+      let name = profile.displayName;
 
+      return text.replace(/\$USER_NAME\$/g, name)
+    }
+  }
 
   // get profile
   async getProfile(event){
     let source = event.source;
     if(!source.userId) return null;
 
-    let pro = await client.getProfile(source.userId);
-
-    console.log(pro);
-    return pro;
-
-    // .then((profile) => {
-    //   console.log(profile.displayName);
-    //   console.log(profile.userId);
-    //   console.log(profile.pictureUrl);
-    //   console.log(profile.statusMessage);
-    // })
-    // .catch((err) => {
-    //   // error handling
-    // });
+    return await client.getProfile(source.userId);
   }
 
   // 預計拆出來

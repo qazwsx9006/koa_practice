@@ -3,7 +3,7 @@ module.exports = {
     regexp: /^(Hi|嗨|哈囉)$/i,
     reply: {
       type: 'text',
-      msg: ['Hello','嗨', '哈囉']
+      msg: ['Hello $USER_NAME$~','嗨', '哈囉']
     }
   },
   callMe:{
