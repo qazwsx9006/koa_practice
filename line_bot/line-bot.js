@@ -1,6 +1,8 @@
 const line = require('@line/bot-sdk');
 const config = require('../configs/config');
 const client = new line.Client(config.Line);
+const db = require('../models');
+const User = db.User;
 
 // story
 const storyboard = require('./line-bot-msg-text-storyboard');
@@ -24,6 +26,11 @@ class LineAction {
     // }
     if (!event) {
       throw new Error("no event pass.");
+    }
+
+    if(this.event.source.userId){
+      // record userid
+      this.user = recordUserInfo(this.event.source.userId);
     }
     this.event = event;
   }
@@ -122,6 +129,7 @@ class LineAction {
 
   async replaceKeyword(text){
     var text = text;
+
     if(text.indexOf('$USER_NAME$') >= 0 ){
       let profile = await this.getProfile(this.event);
       // profile = {
@@ -131,6 +139,9 @@ class LineAction {
       //   statusMessage: 'status xxx'
       // }
       let name = profile.displayName || '';
+      if(name.length > 0){
+        updateUserName(this.user, name)
+      }
 
       text = text.replace(/\$USER_NAME\$/g, name)
     }
@@ -152,6 +163,45 @@ class LineAction {
 
   // 預計拆出來
 
+  //mysql record
+
+  async recordUserInfo(userId){
+    return await User
+      .findOrCreate({where: {userId: userId}})
+      .spread((user, created) => {
+        return user
+        // return user.get({
+        //   plain: true
+        // })
+      })
+  }
+
+  updateUserName(user, name){
+    return user.update({name: name})
+  }
+  //
+
 }
 
 module.exports = LineAction;
+
+
+//  async function recordUserInfo(userId){
+//     return await User
+//       .findOrCreate({where: {userId: userId}})
+//       .spread((user, created) => {
+//         return user
+//         // return user.get({
+//         //   plain: true
+//         // })
+//       })
+//   }
+
+//   async function tt(){
+//     r = await recordUserInfo('abc');
+//     // r = await User.findById(3)
+//     console.log(r);
+//     n = await r.update({name: 'my'})
+//     console.log(n);
+//   }
+// tt();
