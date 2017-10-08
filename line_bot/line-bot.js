@@ -111,7 +111,7 @@ class LineAction {
 
   replyMessage(event, reply){
     let text = Array.isArray(reply.msg) ? reply.msg[Math.floor(Math.random() * reply.msg.length)] : reply.msg ;
-    r = getProfile(event)
+    let r = this.getProfile(event);
     console.log('r', r);
 
     client.replyMessage(event.replyToken, {
@@ -121,21 +121,26 @@ class LineAction {
   }
 
 
+
   // get profile
-  getProfile(event){
+  async getProfile(event){
     let source = event.source;
     if(!source.userId) return null;
 
-    client.getProfile(source.userId)
-    .then((profile) => {
-      console.log(profile.displayName);
-      console.log(profile.userId);
-      console.log(profile.pictureUrl);
-      console.log(profile.statusMessage);
-    })
-    .catch((err) => {
-      // error handling
-    });
+    let pro = await client.getProfile(source.userId);
+
+    console.log(pro);
+    return pro;
+
+    // .then((profile) => {
+    //   console.log(profile.displayName);
+    //   console.log(profile.userId);
+    //   console.log(profile.pictureUrl);
+    //   console.log(profile.statusMessage);
+    // })
+    // .catch((err) => {
+    //   // error handling
+    // });
   }
 
   // 預計拆出來
