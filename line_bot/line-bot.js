@@ -112,7 +112,8 @@ class LineAction {
           break;
         }
 
-        this.replyMessage(actions.reply)
+
+        if(actions.reply) this.replyMessage(actions.reply);
 
         // weather
         if(actions.weather_action){
