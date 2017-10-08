@@ -7,6 +7,9 @@ const User = db.User;
 // story
 const storyboard = require('./line-bot-msg-text-storyboard');
 
+// weather
+const weather = require('./weather');
+
 class LineAction {
   constructor(event) {
     // event example (https://devdocs.line.me/en/#webhook-event-object)
@@ -84,7 +87,6 @@ class LineAction {
 
   }
 
-//
 
   // 預計拆出來
   textMessage(){
@@ -112,10 +114,25 @@ class LineAction {
 
         this.replyMessage(actions.reply)
 
+        // weather
+        if(actions.weather_action){
+          let location = msg_txt.match(actions.regexp)[1];
+          if(location){
+            this.replyWeather(location)
+          }else{
+            client.replyMessage(this.event.replyToken, {
+              type: 'text',
+              text: '格式不符 => M天氣臺北市 , M天氣新北市....'
+            });
+          }
+        }
+        // weather
+
         break;
       }
     }
   }
+
 
   async replyMessage(reply){
     let text = Array.isArray(reply.msg) ? reply.msg[Math.floor(Math.random() * reply.msg.length)] : reply.msg ;
@@ -145,6 +162,7 @@ class LineAction {
 
       text = text.replace(/\$USER_NAME\$/g, name)
     }
+
 
     return text;
   }
@@ -181,6 +199,21 @@ class LineAction {
     return await user.update({name: name})
   }
   //
+
+  // weather
+
+  // test getWeather
+  async replyWeather(placeName){
+    let w_info = await this.getWeather(placeName);
+    client.replyMessage(this.event.replyToken, {
+      type: 'text',
+      text: w_info.join("\n")
+    });
+  }
+
+  async getWeather(placeName){
+    return await weather(placeName);
+  }
 
 }
 
