@@ -30,7 +30,7 @@ class LineAction {
 
     if(event.source.userId){
       // record userid
-      this.user = this.recordUserInfo(event.source.userId);
+      this.recordUserInfo(event.source.userId);
     }
     this.event = event;
   }
@@ -140,7 +140,7 @@ class LineAction {
       // }
       let name = profile.displayName || '';
       if(name.length > 0){
-        this.updateUserName(this.user, name)
+        this.updateUserName(this.event.source.userId, name)
       }
 
       text = text.replace(/\$USER_NAME\$/g, name)
@@ -175,8 +175,8 @@ class LineAction {
       })
   }
 
-  updateUserName(user, name){
-    user = await recordUserInfo(user.userId)
+  async updateUserName(userId, name){
+    let user = this.recordUserInfo(userId)
     return await user.update({name: name})
   }
   //
