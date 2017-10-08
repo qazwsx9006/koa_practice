@@ -111,9 +111,30 @@ class LineAction {
 
   replyMessage(event, reply){
     let text = Array.isArray(reply.msg) ? reply.msg[Math.floor(Math.random() * reply.msg.length)] : reply.msg ;
+    r = getProfile(event)
+    console.log('r', r);
+
     client.replyMessage(event.replyToken, {
       type: reply.type,
       text: text,
+    });
+  }
+
+
+  // get profile
+  getProfile(event){
+    let source = event.source;
+    return null if !source.userId
+
+    client.getProfile(source.userId)
+    .then((profile) => {
+      console.log(profile.displayName);
+      console.log(profile.userId);
+      console.log(profile.pictureUrl);
+      console.log(profile.statusMessage);
+    })
+    .catch((err) => {
+      // error handling
     });
   }
 
