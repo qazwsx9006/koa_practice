@@ -38,3 +38,24 @@ ubuntu 16.04
    $ sudo certbot certonly
 
    // 取的憑證應該會放在這資料夾底下: /etc/letsencrypt/live/$your-domain/
+
+7. 安裝mysql
+  $ sudo apt-get install mysql-common mysql-client libmysqlclient-dev mysql-server
+  // 登入 mysql 建立一個database
+  $ mysql -u root -p
+  mysql> CREATE DATABASE your_database_name CHARACTER SET utf8mb4;
+  mysql> exit;
+
+8. 壓力測試 透過 apache 小工作 ab 來做測試
+  // 在本機上local host 測試可以暫時忽略因為網路連線速度緩慢地問題。
+  $ sudo apt-get install apache2-utils
+  // GET 測試 (透過get 方法在10個人每個人100個請求, 測試url 的回應速度)
+  $ ab -c 10 -n 100 'http://localhost/webhook'
+
+  // POST 測試 (透過post 方法在10個人每個人100個請求, 測試url 的回應速度)
+  // 先將post資料寫入檔案 ex: post_data
+  $ nano post_data
+  // 加上 -p 並指定 post_data 即可測試 post 速度
+  $ ab -c 10 -n 100 -p post_data 'http://localhost/webhook'
+
+

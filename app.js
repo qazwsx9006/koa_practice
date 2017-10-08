@@ -5,13 +5,12 @@ const logger = require('koa-logger');
 const bodyParser = require('koa-bodyparser');
 const views = require('koa-views');
 const json = require('koa-json');
-const c2k = require('koa-connect');
 const fs = require('fs');
 
 // line bot
 const line = require('@line/bot-sdk');
 const config = require('./config');
-const client = new line.Client(config.Line);
+const LineAction = require('./line-bot');
 // line bot
 
 const app = new Koa();
@@ -65,31 +64,8 @@ router.post('/webhook' , async(ctx) => {
   let res = ctx.request;
   let event = res.body.events[0];
 
-  if(event.type === 'message'){
-    var message = event.message;
-    // 文字訊息
-    if(message.type === 'text'){
-      // 離開指令
-      if(message.text === 'Mingyu bye'){
-        if (event.source.type === 'room') {
-          client.leaveRoom(event.source.roomId);
-        } else if (event.source.type === 'group') {
-          client.leaveGroup(event.source.groupId);
-        } else {
-          client.replyMessage(event.replyToken, {
-            type: 'text',
-            text: '不要叫我走ＱＱ',
-          });
-        }
-      }else if(message.text === 'Hi'){
-        client.replyMessage(event.replyToken, {
-          type: 'text',
-          text: 'Hello!!',
-        });
-      }
-
-    }
-  }
+  line_action = new LineAction(event);
+  result = line_action.eventTypeAction()
 
   // client.pushMessage(userId, { type: 'text', text: 'hello, world' });
   ctx.body = 'success'
@@ -109,15 +85,18 @@ app.use(bodyParser());
 
 app.use(router.routes());
 
-app.listen(80);
+if(config.DevelopEnv){
+  app.listen(3001);
+  console.log('start app at port 3001')
+}else{
+  app.listen(80);
 
-console.log('start app at port 3001')
-if(!config.DevelopEnv){
   const options = {
       key: fs.readFileSync(config.SSL.key, 'utf8'),
       cert: fs.readFileSync(config.SSL.cert, 'utf8')
   };
   https.createServer(options, app.callback()).listen(443);
+  console.log('start app at port 80 & 443')
 }
 
 // koa-routes & koa-view 有順序問題。參考如下
