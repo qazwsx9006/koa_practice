@@ -9,8 +9,8 @@ const fs = require('fs');
 
 // line bot
 const line = require('@line/bot-sdk');
-const config = require('./config');
-const LineAction = require('./line-bot');
+const config = require('./configs/config');
+const LineAction = require('./line_bot/line-bot');
 // line bot
 
 const app = new Koa();

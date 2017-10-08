@@ -1,5 +1,5 @@
 const line = require('@line/bot-sdk');
-const config = require('./config');
+const config = require('../configs/config');
 const client = new line.Client(config.Line);
 
 // story
@@ -81,6 +81,7 @@ class LineAction {
 
   // 預計拆出來
   textMessage(event){
+    let message = event.message;
     let msg_txt = message.text;
     let source_type = event.source.type;
     for(var key in storyboard) {
@@ -115,6 +116,8 @@ class LineAction {
       text: text,
     });
   }
+
+  // 預計拆出來
 
 }
 
