@@ -58,4 +58,19 @@ ubuntu 16.04
   // 加上 -p 並指定 post_data 即可測試 post 速度
   $ ab -c 10 -n 100 -p post_data 'http://localhost/webhook'
 
+9. 使用 sequelize (node mysql orm ) 來操作 mysql
+  // 因為是安裝在此專案所以從node_modules呼叫指令
+  $ node_modules/.bin/sequelize init
+  // => 會建立 config/config.json, migrations, models, seeders 4個資料夾
+  // 建立User table 的 migration
+  $ node_modules/.bin/sequelize model:generate --name User --attributes name:string,userId:string
+  // => 會在models 建立 user.js 以及在 migration 建立記錄
+  // 將migration 做db操作
+  $ node_modules/.bin/sequelize db:migrate
+  // rollbak db:migrate
+  $ node_modules/.bin/sequelize db:migrate:undo
 
+  ps: node_modules/.bin/sequelize 預設 會到 config/config.json 抓取資料庫設定。
+  因為我不想用 config.json 記錄 資料庫設定。我想用 config/database.json 來記錄資料設定。
+  因此指令最後要指定 config 檔案
+  $ node_modules/.bin/sequelize db:migrate --config config/database.json
