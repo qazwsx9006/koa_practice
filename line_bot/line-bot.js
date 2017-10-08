@@ -1,5 +1,5 @@
 const line = require('@line/bot-sdk');
-const config = require('../configs/config');
+const config = require('../config/config');
 const client = new line.Client(config.Line);
 const db = require('../models');
 const User = db.User;

@@ -9,7 +9,7 @@ const fs = require('fs');
 
 // line bot
 const line = require('@line/bot-sdk');
-const config = require('./configs/config');
+const config = require('./config/config');
 const LineAction = require('./line_bot/line-bot');
 // line bot
 
