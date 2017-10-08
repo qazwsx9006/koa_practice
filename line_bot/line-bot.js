@@ -109,18 +109,19 @@ class LineAction {
     }
   }
 
-  replyMessage(event, reply){
+  replyMessage(reply){
     let text = Array.isArray(reply.msg) ? reply.msg[Math.floor(Math.random() * reply.msg.length)] : reply.msg ;
+    let new_text = this.replaceKeyword(text);
 
-    client.replyMessage(event.replyToken, {
+    client.replyMessage(this.event.replyToken, {
       type: reply.type,
-      text: this.replaceKeyword(text),
+      text: new_text
     });
   }
 
   async replaceKeyword(text){
     if(text.indexOf('$USER_NAME$') >= 0 ){
-      let profile = await this.getProfile(event);
+      let profile = await this.getProfile(this.event);
       // profile = {
       //   userId: 'xxxxx',
       //   displayName: 'mingyu',
@@ -134,8 +135,8 @@ class LineAction {
   }
 
   // get profile
-  async getProfile(event){
-    let source = event.source;
+  async getProfile(){
+    let source = this.event.source;
     if(!source.userId) return null;
 
     return await client.getProfile(source.userId);
