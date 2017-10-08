@@ -118,4 +118,4 @@ class LineAction {
 
 }
 
-exports.default = LineAction;
+module.exports = LineAction;
