@@ -130,7 +130,7 @@ class LineAction {
       //   pictureUrl: 'http://wwww.www',
       //   statusMessage: 'status xxx'
       // }
-      let name = profile.displayName;
+      let name = profile.displayName || '';
 
       text = text.replace(/\$USER_NAME\$/g, name)
     }
@@ -142,8 +142,12 @@ class LineAction {
   async getProfile(){
     let source = this.event.source;
     if(!source.userId) return null;
-
-    return await client.getProfile(source.userId);
+    try{
+      return await client.getProfile(source.userId);
+    } catch(e){
+      console.log('getProfile Error');
+      return {}
+    }
   }
 
   // 預計拆出來
