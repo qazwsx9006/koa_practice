@@ -169,14 +169,15 @@ class LineAction {
     return await User
       .findOrCreate({where: {userId: userId}})
       .spread((user, created) => {
-        return user.get({
-          plain: true
-        })
+        return user
+        // return user.get({
+        //   plain: true
+        // })
       })
   }
 
   async updateUserName(userId, name){
-    let user = this.recordUserInfo(userId)
+    let user = await this.recordUserInfo(userId)
     return await user.update({name: name})
   }
   //
