@@ -121,6 +121,7 @@ class LineAction {
   }
 
   async replaceKeyword(text){
+    var text = text;
     if(text.indexOf('$USER_NAME$') >= 0 ){
       let profile = await this.getProfile(this.event);
       // profile = {
@@ -131,8 +132,10 @@ class LineAction {
       // }
       let name = profile.displayName;
 
-      return text.replace(/\$USER_NAME\$/g, name)
+      text = text.replace(/\$USER_NAME\$/g, name)
     }
+
+    return text;
   }
 
   // get profile
