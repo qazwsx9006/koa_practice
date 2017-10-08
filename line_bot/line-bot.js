@@ -80,7 +80,8 @@ class LineAction {
 //
 
   // 預計拆出來
-  textMessage(event){
+  textMessage(){
+    let event = this.event;
     let message = event.message;
     let msg_txt = message.text;
     let source_type = event.source.type;
@@ -90,19 +91,19 @@ class LineAction {
 
         // room
         if(source_type === 'room' && actions.room){
-          this.replyMessage(event, actions.room.reply)
+          this.replyMessage(actions.room.reply)
           if(actions.room.leave_action) client.leaveRoom(event.source.roomId);
           break;
         }
 
         // group
         if(source_type === 'group' && actions.group){
-          this.replyMessage(event, actions.group.reply)
+          this.replyMessage(actions.group.reply)
           if(actions.group.leave_action) client.leaveGroup(event.source.groupId);
           break;
         }
 
-        this.replyMessage(event, actions.reply)
+        this.replyMessage(actions.reply)
 
         break;
       }
