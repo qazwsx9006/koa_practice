@@ -28,9 +28,9 @@ class LineAction {
       throw new Error("no event pass.");
     }
 
-    if(this.event.source.userId){
+    if(event.source.userId){
       // record userid
-      this.user = recordUserInfo(this.event.source.userId);
+      this.user = this.recordUserInfo(event.source.userId);
     }
     this.event = event;
   }
@@ -140,7 +140,7 @@ class LineAction {
       // }
       let name = profile.displayName || '';
       if(name.length > 0){
-        updateUserName(this.user, name)
+        this.updateUserName(this.user, name)
       }
 
       text = text.replace(/\$USER_NAME\$/g, name)
@@ -169,15 +169,15 @@ class LineAction {
     return await User
       .findOrCreate({where: {userId: userId}})
       .spread((user, created) => {
-        return user
-        // return user.get({
-        //   plain: true
-        // })
+        return user.get({
+          plain: true
+        })
       })
   }
 
   updateUserName(user, name){
-    return user.update({name: name})
+    user = await recordUserInfo(user.userId)
+    return await user.update({name: name})
   }
   //
 
