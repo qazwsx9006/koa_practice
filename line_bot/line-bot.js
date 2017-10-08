@@ -124,7 +124,7 @@ class LineAction {
   // get profile
   getProfile(event){
     let source = event.source;
-    return null if !source.userId
+    if(!source.userId) return null;
 
     client.getProfile(source.userId)
     .then((profile) => {
