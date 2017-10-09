@@ -206,7 +206,7 @@ class LineAction {
 
   // test getWeather
   async replyWeather(placeName){
-    let placeName = placeName.replace('台', '臺')
+    placeName = placeName.replace('台', '臺')
     let w_info = await this.getWeather(placeName);
     client.replyMessage(this.event.replyToken, {
       type: 'text',
