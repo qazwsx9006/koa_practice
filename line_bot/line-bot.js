@@ -97,8 +97,8 @@ class LineAction {
     let stickerId = message.stickerId.toString();
     let source_type = event.source.type;
     console.log(JSON.stringify(event))
-    let reply = sticker_storyboard[packageId][stickerId];
-    if(reply) replyMessage(reply);
+    let actions = sticker_storyboard[packageId][stickerId];
+    if(actions.reply) this.replyMessage(actions.reply);
   }
 
   // 預計拆出來
