@@ -10,7 +10,7 @@ module.exports = {
     regexp: /^MingyuBot$/i,
     reply: {
       type: 'text',
-      text: "Hi 我是 MingyuBot, 我的指令目前有\n1. Hi,\n2. MingyuBot\n3. Mingyu bye"
+      text: "Hi 我是 MingyuBot, 我的指令目前有\n1. Hi,\n2. MingyuBot\n3. Mingyu bye\n4. M天氣\n5, M吃飯\n6. M運勢"
     }
 
   },
