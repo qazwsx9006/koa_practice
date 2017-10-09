@@ -6,6 +6,7 @@ const User = db.User;
 
 // story
 const storyboard = require('./line-bot-msg-text-storyboard');
+const sticker_storyboard = require('./line-bot-sticker-storyboard');
 
 // weather
 const weather = require('./weather');
@@ -60,7 +61,7 @@ class LineAction {
 
         }else if(message.type === 'sticker'){
           // 基本貼圖對應表 https://devdocs.line.me/files/sticker_list.pdf
-
+          this.stickerMessage(event)
         }
         break;
       case 'follow':
@@ -87,6 +88,18 @@ class LineAction {
 
   }
 
+
+  // 收到 貼圖回應
+  stickerMessage(){
+    let event = this.event;
+    let message = event.message;
+    let packageId = message.packageId.toString();
+    let stickerId = message.stickerId.toString();
+    let source_type = event.source.type;
+    console.log(JSON.stringify(event))
+    let reply = sticker_storyboard[packageId][stickerId];
+    if(reply) replyMessage(reply);
+  }
 
   // 預計拆出來
   textMessage(){
