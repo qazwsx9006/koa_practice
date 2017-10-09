@@ -98,7 +98,7 @@ class LineAction {
     let source_type = event.source.type;
 
     let actions = sticker_storyboard[packageId][stickerId];
-    if(actions.reply) this.replyMessage(actions.reply);
+    if(actions && actions.reply) this.replyMessage(actions.reply);
   }
 
   // 預計拆出來
