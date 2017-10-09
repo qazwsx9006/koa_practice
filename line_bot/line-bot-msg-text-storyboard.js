@@ -47,7 +47,7 @@ module.exports = {
     weather_action: true
   },
   caculator:{
-    regexp: /^([\s\d\(\)\*\+\/]{3,})\=$/,
+    regexp: /^([\s\d\(\)\*\+\/]{3,})\=?$/,
     caculator_action: true
   }
 }
