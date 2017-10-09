@@ -32,7 +32,7 @@ function convertUnit(elemName, parameter){
       return `最低溫：${parameter.parameterName}°C`;
       break;
     case 'CI':
-      return `說明${parameter.parameterName}`;
+      return `${parameter.parameterName}`;
       break;
     case 'MaxT':
       return `最低溫：${parameter.parameterName}°C`;

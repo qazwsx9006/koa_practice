@@ -92,7 +92,7 @@ class LineAction {
   textMessage(){
     let event = this.event;
     let message = event.message;
-    let msg_txt = message.text;
+    let msg_txt = message.text.trim();
     let source_type = event.source.type;
     for(var key in storyboard) {
       let actions = storyboard[key];
@@ -173,6 +173,7 @@ class LineAction {
     let source = this.event.source;
     if(!source.userId) return null;
     try{
+      // 須加好友才可以取的profile
       return await client.getProfile(source.userId);
     } catch(e){
       console.log('getProfile Error');
@@ -205,6 +206,7 @@ class LineAction {
 
   // test getWeather
   async replyWeather(placeName){
+    let placeName = placeName.replace('台', '臺')
     let w_info = await this.getWeather(placeName);
     client.replyMessage(this.event.replyToken, {
       type: 'text',
