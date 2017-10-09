@@ -170,6 +170,7 @@ class LineAction {
 
 
   async replyMessage(reply){
+    reply = Object.assign({}, reply);
     // text message
     if(reply.text && Array.isArray(reply.text)){
       let text =  reply.text[Math.floor(Math.random() * reply.text.length)];
