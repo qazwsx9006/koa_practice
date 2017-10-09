@@ -129,6 +129,27 @@ class LineAction {
         }
         // weather
 
+        // caculator
+        if(actions.caculator_action){
+          let expression = msg_txt.match(actions.regexp)[1].trim();
+
+          try{
+            let answer = eval(expression);
+            client.replyMessage(this.event.replyToken, {
+              type: 'text',
+              text: `${expression} = ${answer}`
+            });
+          } catch(e){
+            client.replyMessage(this.event.replyToken, {
+              type: 'text',
+              text: '運算格式有問題喔！'
+            });
+          }
+          if(expression){
+          }
+        }
+        // caculator
+
         break;
       }
     }
