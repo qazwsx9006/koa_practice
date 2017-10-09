@@ -90,19 +90,19 @@ class LineAction {
 
 
   // 收到 貼圖回應
-  stickerMessage(){
+  async stickerMessage(){
     let event = this.event;
     let message = event.message;
     let packageId = message.packageId.toString();
     let stickerId = message.stickerId.toString();
     let source_type = event.source.type;
-    console.log(JSON.stringify(event))
+
     let actions = sticker_storyboard[packageId][stickerId];
     if(actions.reply) this.replyMessage(actions.reply);
   }
 
   // 預計拆出來
-  textMessage(){
+  async textMessage(){
     let event = this.event;
     let message = event.message;
     let msg_txt = message.text.trim();
@@ -113,14 +113,14 @@ class LineAction {
 
         // room
         if(source_type === 'room' && actions.room){
-          this.replyMessage(actions.room.reply)
+          await this.replyMessage(actions.room.reply)
           if(actions.room.leave_action) client.leaveRoom(event.source.roomId);
           break;
         }
 
         // group
         if(source_type === 'group' && actions.group){
-          this.replyMessage(actions.group.reply)
+          await this.replyMessage(actions.group.reply)
           if(actions.group.leave_action) client.leaveGroup(event.source.groupId);
           break;
         }
@@ -170,13 +170,21 @@ class LineAction {
 
 
   async replyMessage(reply){
-    let text = Array.isArray(reply.msg) ? reply.msg[Math.floor(Math.random() * reply.msg.length)] : reply.msg ;
-    let new_text = await this.replaceKeyword(text);
+    // text message
+    if(reply.text && Array.isArray(reply.text)){
+      let text =  reply.text[Math.floor(Math.random() * reply.text.length)];
+      reply.text = await this.replaceKeyword(text);
+    }
 
-    client.replyMessage(this.event.replyToken, {
-      type: reply.type,
-      text: new_text
-    });
+    // sticker message
+    if(reply.packageId && Array.isArray(reply.packageId)){
+      reply.packageId = reply.packageId[Math.floor(Math.random() * reply.packageId.length)];
+    }
+    if(reply.stickerId && Array.isArray(reply.stickerId)){
+      reply.stickerId = reply.stickerId[Math.floor(Math.random() * reply.stickerId.length)];
+    }
+
+    client.replyMessage(this.event.replyToken, reply);
   }
 
   async replaceKeyword(text){
