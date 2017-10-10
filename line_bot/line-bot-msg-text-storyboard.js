@@ -65,6 +65,35 @@ module.exports = {
       packageId: 1,
       stickerId: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 21, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 401, 402, 403, 404, 405, 406]
     }
+  },
+  test_t_btns:{
+    regexp: /^M按鈕/,
+    reply:{
+      type: 'template',
+      altText: '按鈕 template',
+      template: {
+        type: 'buttons',
+        title: 'Menu',
+        text: '請選擇',
+        actions: [
+          {
+            type: 'postback',
+            label: '買鞋子',
+            data: 'action=buy&itemid=123'
+          },
+          {
+            type: 'postback',
+            label: '買衣服',
+            data: 'action=buy&itemid=999'
+          },
+          {
+            type: 'uri',
+            label: '推薦貼圖巨人雞腳',
+            data: 'https://store.line.me/stickershop/product/1510246/zh-Hant'
+          }
+        ]
+      }
+    }
   }
 }
 
