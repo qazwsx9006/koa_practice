@@ -89,8 +89,31 @@ module.exports = {
           {
             type: 'uri',
             label: '推薦貼圖巨人雞腳',
-            data: 'https://store.line.me/stickershop/product/1510246/zh-Hant'
+            uri: 'https://store.line.me/stickershop/product/1510246/zh-Hant'
           }
+        ]
+      }
+    }
+  },
+  test_t_confirm:{
+    regexp: /^M是否/,
+    reply:{
+      type: 'template',
+      altText: '我帥不帥',
+      template: {
+        type: 'confirm',
+        text: '告訴我吧！',
+        actions: [
+          {
+            type: "message",
+            label: "Yes",
+            text: "是"
+          },
+          {
+            type: "message",
+            label: "No",
+            text: "否"
+          },
         ]
       }
     }

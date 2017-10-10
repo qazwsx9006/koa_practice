@@ -65,21 +65,27 @@ class LineAction {
         }
         break;
       case 'follow':
+        console.log(JSON.stringify(event));
         console.log("==========> event type: follow trigger");
         break;
       case 'unfollow':
+        console.log(JSON.stringify(event));
         console.log("==========> event type: unfollow trigger");
         break;
       case 'join':
+        console.log(JSON.stringify(event));
         console.log("==========> event type: join trigger");
         break;
       case 'leave':
+        console.log(JSON.stringify(event));
         console.log("==========> event type: leave trigger");
         break;
       case 'postback':
+        console.log(JSON.stringify(event));
         console.log("==========> event type: postback trigger");
         break;
       case 'beacon':
+        console.log(JSON.stringify(event));
         console.log("==========> event type: beacon trigger");
         break;
       default:
