@@ -70,10 +70,10 @@ module.exports = {
     regexp: /^M按鈕/,
     reply:{
       type: 'template',
-      altText: '按鈕 template',
+      altText: 'Mingyu商店',
       template: {
         type: 'buttons',
-        title: 'Menu',
+        title: 'Mingyu 商店',
         text: '請選擇',
         actions: [
           {
@@ -102,7 +102,7 @@ module.exports = {
       altText: '我帥不帥',
       template: {
         type: 'confirm',
-        text: '告訴我吧！',
+        text: '我帥不帥，告訴我吧！',
         actions: [
           {
             type: "message",
