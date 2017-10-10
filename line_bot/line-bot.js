@@ -82,6 +82,12 @@ class LineAction {
         break;
       case 'postback':
         console.log(JSON.stringify(event));
+
+        client.replyMessage(this.event.replyToken, {
+          type: 'text',
+          text: '缺貨中'
+        });
+
         console.log("==========> event type: postback trigger");
         break;
       case 'beacon':
