@@ -11,7 +11,7 @@ const sticker_storyboard = require('./line-bot-sticker-storyboard');
 // weather
 const weather = require('./weather');
 // astrology
-const astrology = require('./astrology');
+const astrology_fetch = require('./astrology');
 
 class LineAction {
   constructor(event) {
@@ -292,8 +292,7 @@ class LineAction {
 
   // astrology
   async replyAstrology(astrology){
-    console.log(astrology)
-    let astrology_info = await astrology(astrology);
+    let astrology_info = await astrology_fetch(astrology);
     client.replyMessage(this.event.replyToken, {
       type: 'text',
       text: astrology_info
@@ -303,7 +302,6 @@ class LineAction {
 }
 
 module.exports = LineAction;
-
 
 //  async function recordUserInfo(userId){
 //     return await User
