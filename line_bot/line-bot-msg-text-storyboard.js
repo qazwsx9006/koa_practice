@@ -66,6 +66,10 @@ module.exports = {
       stickerId: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 21, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 401, 402, 403, 404, 405, 406]
     }
   },
+  astrology:{
+    regexp: /^M(白羊|牡羊|獅子|射手|水瓶|雙子|天秤|金牛|處女|摩羯|巨蟹|天蠍|雙魚|aries|leo|sagittarius|aquarius|gemini|libra|taurus|virgo|capricorn|cancer|scorpio|pisces){1}座?/i,
+    astrology_action: true
+  },
   test_t_btns:{
     regexp: /^M按鈕/,
     reply:{

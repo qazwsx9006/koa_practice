@@ -10,6 +10,8 @@ const sticker_storyboard = require('./line-bot-sticker-storyboard');
 
 // weather
 const weather = require('./weather');
+// astrology
+const astrology = require('./astrology');
 
 class LineAction {
   constructor(event) {
@@ -175,6 +177,21 @@ class LineAction {
         }
         // caculator
 
+        // astrology
+        if(actions.astrology_action){
+          let astrology = msg_txt.match(actions.regexp)[1].trim();
+          if(astrology){
+            this.replyAstrology(astrology)
+          }else{
+            client.replyMessage(this.event.replyToken, {
+              type: 'text',
+              text: '格式不符 => M牡羊....'
+            });
+          }
+
+        }
+        // astrology
+
         break;
       }
     }
@@ -271,6 +288,16 @@ class LineAction {
 
   async getWeather(placeName){
     return await weather(placeName);
+  }
+
+  // astrology
+  async replyAstrology(astrology){
+    console.log(astrology)
+    let astrology_info = await astrology(astrology);
+    client.replyMessage(this.event.replyToken, {
+      type: 'text',
+      text: astrology_info
+    });
   }
 
 }
