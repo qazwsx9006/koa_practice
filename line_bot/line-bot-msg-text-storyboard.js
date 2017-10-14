@@ -70,6 +70,10 @@ module.exports = {
     regexp: /^M(白羊|牡羊|獅子|射手|水瓶|雙子|天秤|金牛|處女|摩羯|巨蟹|天蠍|雙魚|aries|leo|sagittarius|aquarius|gemini|libra|taurus|virgo|capricorn|cancer|scorpio|pisces){1}座?/i,
     astrology_action: true
   },
+  ptt:{
+    regexp: /^PTT\s{0,}([\u4e00-\u9fa5_a-z0-9]+)/i,
+    ptt_action: true
+  },
   test_t_btns:{
     regexp: /^M按鈕/,
     reply:{

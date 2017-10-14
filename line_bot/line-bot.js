@@ -9,9 +9,11 @@ const storyboard = require('./line-bot-msg-text-storyboard');
 const sticker_storyboard = require('./line-bot-sticker-storyboard');
 
 // weather
-const weather = require('./weather');
+const weather_info = require('./weather');
 // astrology
 const astrology_fetch = require('./astrology');
+// ptt
+const ptt_articles = require('./ptt');
 
 class LineAction {
   constructor(event) {
@@ -192,6 +194,21 @@ class LineAction {
         }
         // astrology
 
+        // ptt
+        if(actions.ptt_action){
+          let board = msg_txt.match(actions.regexp)[1].trim();
+          if(board){
+            this.replyPtt(board)
+          }else{
+            client.replyMessage(this.event.replyToken, {
+              type: 'text',
+              text: `找不到 ${board} 相關資訊`
+            });
+          }
+
+        }
+        // ptt
+
         break;
       }
     }
@@ -279,15 +296,11 @@ class LineAction {
   // test getWeather
   async replyWeather(placeName){
     placeName = placeName.replace('台', '臺')
-    let w_info = await this.getWeather(placeName);
+    let w_info = await weather_info(placeName);
     client.replyMessage(this.event.replyToken, {
       type: 'text',
       text: w_info.join("\n")
     });
-  }
-
-  async getWeather(placeName){
-    return await weather(placeName);
   }
 
   // astrology
@@ -296,6 +309,19 @@ class LineAction {
     client.replyMessage(this.event.replyToken, {
       type: 'text',
       text: astrology_info
+    });
+  }
+
+  // ptt
+  async replyPtt(board){
+    let board_infos = await ptt_articles(board);
+    let articles = board_infos.articles
+    let articles_string = articles.map(function(elem){
+                            return `${elem.push} ${elem.title}\n${elem.date} ${elem.author}\n${elem.url}`
+                          }).join("\n\n")
+    client.replyMessage(this.event.replyToken, {
+      type: 'text',
+      text: articles_string
     });
   }
 
