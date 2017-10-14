@@ -315,6 +315,13 @@ class LineAction {
   // ptt
   async replyPtt(board){
     let board_infos = await ptt_articles(board);
+    if(!board_infos){
+      client.replyMessage(this.event.replyToken, {
+        type: 'text',
+        text: `找不到PTT ${board} 相關資訊`
+      });
+      return
+    }
     let articles = board_infos.articles
     let articles_string = articles.map(function(elem){
                             return `${elem.push} ${elem.title}\n${elem.date} ${elem.author}\n${elem.url}`
