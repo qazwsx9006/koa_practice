@@ -14,6 +14,8 @@ const weather_info = require('./weather');
 const astrology_fetch = require('./astrology');
 // ptt
 const ptt_articles = require('./ptt');
+// learn_word
+const learn_word = require('./learn_word');
 
 class LineAction {
   constructor(event) {
@@ -123,10 +125,11 @@ class LineAction {
     let message = event.message;
     let msg_txt = message.text.trim();
     let source_type = event.source.type;
+    var cmd_msg = false;
     for(var key in storyboard) {
       let actions = storyboard[key];
       if(msg_txt.match(actions.regexp)){
-
+        cmd_msg = true;
         // room
         if(source_type === 'room' && actions.room){
           await this.replyMessage(actions.room.reply)
@@ -136,6 +139,13 @@ class LineAction {
 
         // group
         if(source_type === 'group' && actions.group){
+          if(actions.group.learn_word_action){
+            let g_id = event.source.groupId;
+            let keyword = msg_txt.match(actions.regexp)[1].trim();
+            let reply = msg_txt.match(actions.regexp)[2].trim();
+            this.myLearnWord(g_id, keyword, reply)
+            break;
+          }
           await this.replyMessage(actions.group.reply)
           if(actions.group.leave_action) client.leaveGroup(event.source.groupId);
           break;
@@ -211,6 +221,11 @@ class LineAction {
 
         break;
       }
+    }
+
+    if(!cmd_msg && source_type === 'group'){
+      let g_id = event.source.groupId;
+      this.replyLearnWord(g_id, msg_txt.trim())
     }
   }
 
@@ -329,6 +344,25 @@ class LineAction {
     client.replyMessage(this.event.replyToken, {
       type: 'text',
       text: articles_string
+    });
+  }
+
+
+  // learn_word
+  async myLearnWord(g_id, keyword, reply){
+    let learnWord = await learn_word.learnWord(g_id, keyword, reply);
+    client.replyMessage(this.event.replyToken, {
+      type: 'text',
+      text: `好喔，[${learnWord.keyword} => ${learnWord.reply}] 我記住了`
+    });
+  }
+
+  async replyLearnWord(g_id, keyword){
+    let learnWord = await learn_word.getLearnWordReply(g_id, keyword);
+    if(!learnWord) return;
+    client.replyMessage(this.event.replyToken, {
+      type: 'text',
+      text: learnWord.reply
     });
   }
 

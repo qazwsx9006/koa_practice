@@ -125,6 +125,12 @@ module.exports = {
         ]
       }
     }
+  },
+  learn_word:{
+    regexp: /^MY\s*;([^;]+);(.+)/i,
+    group: {
+      learn_word_action: true
+    }
   }
 }
 
