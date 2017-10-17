@@ -361,10 +361,11 @@ class LineAction {
 
   // learn_word
   async myLearnWord(c_id, keyword, reply, source_type){
+    let learnWord;
     if(source_type === 'group'){
-      let learnWord = await learn_word.learnWordGroup(c_id, keyword, reply);
+      learnWord = await learn_word.learnWordGroup(c_id, keyword, reply);
     }else if(source_type === 'room'){
-      let learnWord = await learn_word.learnWordRoom(c_id, keyword, reply);
+      learnWord = await learn_word.learnWordRoom(c_id, keyword, reply);
     }
     client.replyMessage(this.event.replyToken, {
       type: 'text',
@@ -373,10 +374,11 @@ class LineAction {
   }
 
   async replyLearnWord(c_id, keyword, source_type){
+    let learnWord;
     if(source_type === 'group'){
-      let learnWord = await learn_word.getLearnWordReplyGroup(c_id, keyword);
+      learnWord = await learn_word.getLearnWordReplyGroup(c_id, keyword);
     }else if(source_type === 'room'){
-      let learnWord = await learn_word.getLearnWordReplyRoom(c_id, keyword);
+      learnWord = await learn_word.getLearnWordReplyRoom(c_id, keyword);
     }
     if(!learnWord) return;
     client.replyMessage(this.event.replyToken, {
