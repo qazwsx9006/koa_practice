@@ -130,6 +130,9 @@ module.exports = {
     regexp: /^MY\s*;([^;]+);(.+)/i,
     group: {
       learn_word_action: true
+    },
+    room: {
+      learn_word_action: true
     }
   }
 }

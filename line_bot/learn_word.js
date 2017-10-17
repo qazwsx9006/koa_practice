@@ -4,7 +4,7 @@ const LearnWord = db.LearnWord;
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 
-async function learnWord(g_id, keyword, reply){
+async function learnWordGroup(g_id, keyword, reply){
   let learn_word = await LearnWord.findOrCreate({
                       where:{
                         groupId: g_id,
@@ -17,11 +17,35 @@ async function learnWord(g_id, keyword, reply){
   return learn_word.get({plain: true})
 }
 
-async function getLearnWordReply(g_id, keyword){
+async function getLearnWordReplyGroup(g_id, keyword){
 
   let record = await LearnWord.findOne({
                   where:{
                     groupId: g_id,
+                    keyword: keyword
+                  }
+                })
+  return record ? record.get({plain: true}) : null
+}
+
+async function learnWordRoom(r_id, keyword, reply){
+  let learn_word = await LearnWord.findOrCreate({
+                      where:{
+                        roomId: r_id,
+                        keyword: keyword
+                      }
+                    }).spread((learn_word, created) => {
+                      return learn_word
+                    });
+  learn_word.update({reply: reply});
+  return learn_word.get({plain: true})
+}
+
+async function getLearnWordReplyRoom(r_id, keyword){
+
+  let record = await LearnWord.findOne({
+                  where:{
+                    roomId: r_id,
                     keyword: keyword
                   }
                 })
@@ -34,6 +58,8 @@ async function getLearnWordReply(g_id, keyword){
 // // LearnWord.destroy({where:{}});
 
 module.exports = {
-  learnWord: learnWord,
-  getLearnWordReply: getLearnWordReply
+  learnWordGroup: learnWordGroup,
+  getLearnWordReplyGroup: getLearnWordReplyGroup,
+  learnWordRoom: learnWordRoom,
+  getLearnWordReplyRoom: getLearnWordReplyRoom
 };

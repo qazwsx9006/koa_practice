@@ -132,6 +132,13 @@ class LineAction {
         cmd_msg = true;
         // room
         if(source_type === 'room' && actions.room){
+          if(actions.room.learn_word_action){
+            let r_id = event.source.roomId;
+            let keyword = msg_txt.match(actions.regexp)[1].trim();
+            let reply = msg_txt.match(actions.regexp)[2].trim();
+            this.myLearnWord(r_id, keyword, reply, 'room')
+            break;
+          }
           await this.replyMessage(actions.room.reply)
           if(actions.room.leave_action) client.leaveRoom(event.source.roomId);
           break;
@@ -143,7 +150,7 @@ class LineAction {
             let g_id = event.source.groupId;
             let keyword = msg_txt.match(actions.regexp)[1].trim();
             let reply = msg_txt.match(actions.regexp)[2].trim();
-            this.myLearnWord(g_id, keyword, reply)
+            this.myLearnWord(g_id, keyword, reply, 'group')
             break;
           }
           await this.replyMessage(actions.group.reply)
@@ -223,9 +230,13 @@ class LineAction {
       }
     }
 
+    if(!cmd_msg && source_type === 'room'){
+      let r_id = event.source.roomId;
+      this.replyLearnWord(r_id, msg_txt.trim(), 'room')
+    }
     if(!cmd_msg && source_type === 'group'){
       let g_id = event.source.groupId;
-      this.replyLearnWord(g_id, msg_txt.trim())
+      this.replyLearnWord(g_id, msg_txt.trim(), 'group')
     }
   }
 
@@ -349,16 +360,24 @@ class LineAction {
 
 
   // learn_word
-  async myLearnWord(g_id, keyword, reply){
-    let learnWord = await learn_word.learnWord(g_id, keyword, reply);
+  async myLearnWord(c_id, keyword, reply, source_type){
+    if(source_type === 'group'){
+      let learnWord = await learn_word.learnWordGroup(c_id, keyword, reply);
+    }else if(source_type === 'room'){
+      let learnWord = await learn_word.learnWordRoom(c_id, keyword, reply);
+    }
     client.replyMessage(this.event.replyToken, {
       type: 'text',
       text: `好喔，[${learnWord.keyword} => ${learnWord.reply}] 我記住了`
     });
   }
 
-  async replyLearnWord(g_id, keyword){
-    let learnWord = await learn_word.getLearnWordReply(g_id, keyword);
+  async replyLearnWord(c_id, keyword, source_type){
+    if(source_type === 'group'){
+      let learnWord = await learn_word.getLearnWordReplyGroup(c_id, keyword);
+    }else if(source_type === 'room'){
+      let learnWord = await learn_word.getLearnWordReplyRoom(c_id, keyword);
+    }
     if(!learnWord) return;
     client.replyMessage(this.event.replyToken, {
       type: 'text',
