@@ -226,6 +226,17 @@ class LineAction {
         }
         // ptt
 
+        // 表特
+        if(actions.ptt_beauty_actions){
+          client.replyMessage(this.event.replyToken, {
+            type: 'image',
+            originalContentUrl: 'https://mingyu.bonimages.tw/images/20171021/0/nLT8tyk.jpg',
+            previewImageUrl: 'https://mingyu.bonimages.tw/images/20171021/0/nLT8tyk.jpg'
+          });
+
+        }
+        // 表特
+
         break;
       }
     }

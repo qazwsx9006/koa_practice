@@ -134,6 +134,10 @@ module.exports = {
     room: {
       learn_word_action: true
     }
+  },
+  ptt_beauty:{
+    regexp: /^M表特$/i,
+    ptt_beauty_actions: true
   }
 }
 
