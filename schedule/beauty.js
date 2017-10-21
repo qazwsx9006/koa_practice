@@ -8,6 +8,9 @@ const request = request_promise.defaults({ jar: jar });
 const request_image = require('request');
 
 const fs = require('fs');
+const db = require('../models');
+const Photo = db.Photo;
+
 
 async function getBeauties(target_url){
   console.log(target_url);
@@ -22,8 +25,6 @@ async function getBeauties(target_url){
   // 判斷是否要繼續往前一頁抓資料
   let d = getYesterdaysDate();
   let target_date = formatPttDate(d);
-console.log(d)
-console.log(target_date)
   $('#main-container > div.r-list-container.bbs-screen > div').each(function (i, element) {
     let $elem = $(element);
     if($elem.hasClass('r-list-sep')) return false;
@@ -139,6 +140,16 @@ function downloadImage(image_url, target_folder){
       fs.writeFile(`${target_folder}/${filename}`, res.body, 'binary', (e) => {
         if(e){
           console.log('error')
+        }else{
+          Photo.findOrCreate({
+            where:{
+              name: filename,
+              path: `${target_folder}/${filename}`,
+              label: 'ptt_beauty'
+            }
+          }).spread((learn_word, created) => {
+            return learn_word.get({plain: true})
+          });
         }
       })
       // console.log(`download: ${target_folder}/${filename}`)
