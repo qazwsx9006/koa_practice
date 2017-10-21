@@ -6,6 +6,7 @@ const bodyParser = require('koa-bodyparser');
 const views = require('koa-views');
 const json = require('koa-json');
 const fs = require('fs');
+const static_serve = require('koa-static');
 
 // line bot
 const line = require('@line/bot-sdk');
@@ -82,6 +83,8 @@ app.use(views(__dirname, {
 }));
 
 app.use(bodyParser());
+
+app.use(static_serve(__dirname + '/public'))
 
 app.use(router.routes());
 
