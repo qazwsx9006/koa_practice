@@ -3,6 +3,7 @@ const config = require('../config/config');
 const client = new line.Client(config.Line);
 const db = require('../models');
 const User = db.User;
+const Photo = db.Photo;
 
 // story
 const storyboard = require('./line-bot-msg-text-storyboard');
@@ -228,11 +229,17 @@ class LineAction {
 
         // 表特
         if(actions.ptt_beauty_actions){
-          client.replyMessage(this.event.replyToken, {
-            type: 'image',
-            originalContentUrl: 'https://mingyu.bonimages.tw/images/20171021/0/nLT8tyk.jpg',
-            previewImageUrl: 'https://mingyu.bonimages.tw/images/20171021/0/nLT8tyk.jpg'
-          });
+          Photo.find({
+            order: [Sequelize.fn('RAND')]
+          }).then((image) => {
+            let img = image.get();
+            let img_url = `https://mingyu.bonimages.tw/${img.path}`
+            client.replyMessage(this.event.replyToken, {
+              type: 'image',
+              originalContentUrl: img_url,
+              previewImageUrl: img_url
+            });
+          })
 
         }
         // 表特

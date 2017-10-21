@@ -135,6 +135,7 @@ async function downloadBeauty(target_url, loop_count){
 
 function downloadImage(image_url, target_folder){
   let filename = image_url.substring(image_url.lastIndexOf('/')+1).replace(/((\?|#).*)?$/,'');
+  let db_path = target_folder.gsub("./public/","");
   request_image.get({url: image_url, encoding: 'binary'}, (err,res) => {
     if(res.statusCode){
       fs.writeFile(`${target_folder}/${filename}`, res.body, 'binary', (e) => {
@@ -144,7 +145,7 @@ function downloadImage(image_url, target_folder){
           Photo.findOrCreate({
             where:{
               name: filename,
-              path: `${target_folder}/${filename}`,
+              path: `${db_path}/${filename}`,
               label: 'ptt_beauty'
             }
           }).spread((learn_word, created) => {
