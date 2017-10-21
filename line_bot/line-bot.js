@@ -1,6 +1,7 @@
 const line = require('@line/bot-sdk');
 const config = require('../config/config');
 const client = new line.Client(config.Line);
+const Sequelize = require('sequelize');
 const db = require('../models');
 const User = db.User;
 const Photo = db.Photo;
