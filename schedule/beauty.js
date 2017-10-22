@@ -173,33 +173,33 @@ function downloadImage(image_url, target_folder){
 
   //
 
-  let _img = imageMagick(request_image.get({url: image_url}));
-  _img.resize(1024, 1024, '>').write(`${target_folder}/${filename}`, function (err) {
-    if(err){
-      console.log(err)
-    }else{
+  // let _img = imageMagick(request_image.get({url: image_url}));
+  // _img.resize(1024, 1024, '>').write(`${target_folder}/${filename}`, function (err) {
+  //   if(err){
+  //     console.log(err)
+  //   }else{
 
-      Photo.findOrCreate({
-        where:{
-          name: filename,
-          path: `${db_path}/${filename}`,
-          previewPath: `${db_path}/preview_${filename}`,
-          label: 'ptt_beauty'
-        }
-      }).spread((photo, created) => {
-        return photo.get({plain: true})
-      });
-      // console.log(`download: ${target_folder}/${filename}`)
-    }
-  })
+  //     Photo.findOrCreate({
+  //       where:{
+  //         name: filename,
+  //         path: `${db_path}/${filename}`,
+  //         previewPath: `${db_path}/preview_${filename}`,
+  //         label: 'ptt_beauty'
+  //       }
+  //     }).spread((photo, created) => {
+  //       return photo.get({plain: true})
+  //     });
+  //     // console.log(`download: ${target_folder}/${filename}`)
+  //   }
+  // })
 
-  _img.resize(240, 240, '>').write(`${target_folder}/preview_${filename}`, function (err) {
-    if(err){
-      console.log(err)
-    }else{
-      // console.log(`create_preview: ${target_folder}/preview_${filename}`)
-    }
-  });
+  // _img.resize(240, 240, '>').write(`${target_folder}/preview_${filename}`, function (err) {
+  //   if(err){
+  //     console.log(err)
+  //   }else{
+  //     // console.log(`create_preview: ${target_folder}/preview_${filename}`)
+  //   }
+  // });
 
 }
 
