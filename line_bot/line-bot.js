@@ -239,7 +239,7 @@ class LineAction {
             client.replyMessage(this.event.replyToken, {
               type: 'image',
               originalContentUrl: img_url,
-              previewImageUrl: preview_img_url
+              previewImageUrl: img_url
             });
           })
 
