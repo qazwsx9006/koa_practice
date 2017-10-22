@@ -144,16 +144,27 @@ function downloadImage(image_url, target_folder){
     if(err){
       console.log(err)
     }else{
+
       Photo.findOrCreate({
         where:{
           name: filename,
           path: `${db_path}/${filename}`,
-          previewPath: `${db_path}/preview_${filename}`,
           label: 'ptt_beauty'
         }
-      }).spread((photo, created) => {
-        return photo.get({plain: true})
+      }).spread((learn_word, created) => {
+        return learn_word.get({plain: true})
       });
+
+      // Photo.findOrCreate({
+      //   where:{
+      //     name: filename,
+      //     path: `${db_path}/${filename}`,
+      //     previewPath: `${db_path}/preview_${filename}`,
+      //     label: 'ptt_beauty'
+      //   }
+      // }).spread((photo, created) => {
+      //   return photo.get({plain: true})
+      // });
       // console.log(`download: ${target_folder}/${filename}`)
     }
   })
@@ -165,6 +176,31 @@ function downloadImage(image_url, target_folder){
       // console.log(`create_preview: ${target_folder}/preview_${filename}`)
     }
   });
+
+  // request_image.get({url: image_url, encoding: 'binary'}, (err,res) => {
+  //   if(res.statusCode){
+  //     fs.writeFile(`${target_folder}/${filename}`, res.body, 'binary', (e) => {
+  //       if(e){
+  //         console.log('error')
+  //       }else{
+  //         Photo.findOrCreate({
+  //           where:{
+  //             name: filename,
+  //             path: `${db_path}/${filename}`,
+  //             label: 'ptt_beauty'
+  //           }
+  //         }).spread((learn_word, created) => {
+  //           return learn_word.get({plain: true})
+  //         });
+  //       }
+  //     })
+  //     // console.log(`download: ${target_folder}/${filename}`)
+  //   }else{
+  //     console.log(`failed download: ${target_folder}/${filename}`)
+  //   };
+  // })
+
+
 }
 
 function createFolder(path, __callback){
