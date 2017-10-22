@@ -155,13 +155,13 @@ function downloadImage(image_url, target_folder){
             return photo.get({plain: true})
           });
 
-          imageMagick(`${target_folder}/${filename}`).resize(240, 240, '>').write(`${target_folder}/preview_${filename}`, function (err) {
-            if(err){
-              console.log(err)
-            }else{
-              // console.log(`create_preview: ${target_folder}/preview_${filename}`)
-            }
-          });
+          // imageMagick(`${target_folder}/${filename}`).resize(240, 240, '>').write(`${target_folder}/preview_${filename}`, function (err) {
+          //   if(err){
+          //     console.log(err)
+          //   }else{
+          //     // console.log(`create_preview: ${target_folder}/preview_${filename}`)
+          //   }
+          // });
 
         }
       })
@@ -239,8 +239,8 @@ function formatPttDate(_date){
   return parseInt(`${month}${date}`)
 }
 
-let default_url = `${BASE_URL}/bbs/beauty/index.html`
-downloadBeauty(default_url);
+// let default_url = `${BASE_URL}/bbs/beauty/index.html`
+// downloadBeauty(default_url);
 
 
-// module.exports = downloadBeauty;
+module.exports = downloadBeauty;
