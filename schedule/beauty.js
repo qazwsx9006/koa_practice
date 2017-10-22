@@ -154,7 +154,7 @@ function downloadImage(image_url, target_folder){
       }).spread((photo, created) => {
         return photo.get({plain: true})
       });
-      console.log(`download: ${target_folder}/${filename}`)
+      // console.log(`download: ${target_folder}/${filename}`)
     }
   })
 
@@ -162,7 +162,7 @@ function downloadImage(image_url, target_folder){
     if(err){
       console.log(err)
     }else{
-      console.log(`create_preview: ${target_folder}/preview_${filename}`)
+      // console.log(`create_preview: ${target_folder}/preview_${filename}`)
     }
   });
 }
@@ -203,8 +203,8 @@ function formatPttDate(_date){
   return parseInt(`${month}${date}`)
 }
 
-let default_url = `${BASE_URL}/bbs/beauty/index.html`
-downloadBeauty(default_url);
+// let default_url = `${BASE_URL}/bbs/beauty/index.html`
+// downloadBeauty(default_url);
 
 
-// module.exports = downloadBeauty;
+module.exports = downloadBeauty;
