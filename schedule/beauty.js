@@ -11,9 +11,6 @@ const fs = require('fs');
 const db = require('../models');
 const Photo = db.Photo;
 
-const gm = require('gm');
-const imageMagick = gm.subClass({imageMagick: true});
-
 async function getBeauties(target_url){
   console.log(target_url);
   try{
@@ -154,15 +151,6 @@ function downloadImage(image_url, target_folder){
           }).spread((photo, created) => {
             return photo.get({plain: true})
           });
-
-          // imageMagick(`${target_folder}/${filename}`).resize(240, 240, '>').write(`${target_folder}/preview_${filename}`, function (err) {
-          //   if(err){
-          //     console.log(err)
-          //   }else{
-          //     // console.log(`create_preview: ${target_folder}/preview_${filename}`)
-          //   }
-          // });
-
         }
       })
       // console.log(`download: ${target_folder}/${filename}`)
@@ -170,37 +158,6 @@ function downloadImage(image_url, target_folder){
       console.log(`failed download: ${target_folder}/${filename}`)
     };
   })
-
-  //
-
-  // let _img = imageMagick(request_image.get({url: image_url}));
-  // _img.resize(1024, 1024, '>').write(`${target_folder}/${filename}`, function (err) {
-  //   if(err){
-  //     console.log(err)
-  //   }else{
-
-  //     Photo.findOrCreate({
-  //       where:{
-  //         name: filename,
-  //         path: `${db_path}/${filename}`,
-  //         previewPath: `${db_path}/preview_${filename}`,
-  //         label: 'ptt_beauty'
-  //       }
-  //     }).spread((photo, created) => {
-  //       return photo.get({plain: true})
-  //     });
-  //     // console.log(`download: ${target_folder}/${filename}`)
-  //   }
-  // })
-
-  // _img.resize(240, 240, '>').write(`${target_folder}/preview_${filename}`, function (err) {
-  //   if(err){
-  //     console.log(err)
-  //   }else{
-  //     // console.log(`create_preview: ${target_folder}/preview_${filename}`)
-  //   }
-  // });
-
 }
 
 function createFolder(path, __callback){
