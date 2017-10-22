@@ -235,10 +235,11 @@ class LineAction {
           }).then((image) => {
             let img = image.get();
             let img_url = `https://mingyu.bonimages.tw/${img.path}`
+            let preview_img_url = `https://mingyu.bonimages.tw/${img.previewPath}`
             client.replyMessage(this.event.replyToken, {
               type: 'image',
               originalContentUrl: img_url,
-              previewImageUrl: img_url
+              previewImageUrl: preview_img_url
             });
           })
 

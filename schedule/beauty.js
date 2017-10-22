@@ -11,6 +11,8 @@ const fs = require('fs');
 const db = require('../models');
 const Photo = db.Photo;
 
+const gm = require('gm');
+const imageMagick = gm.subClass({imageMagick: true});
 
 async function getBeauties(target_url){
   console.log(target_url);
@@ -136,28 +138,33 @@ async function downloadBeauty(target_url, loop_count){
 function downloadImage(image_url, target_folder){
   let filename = image_url.substring(image_url.lastIndexOf('/')+1).replace(/((\?|#).*)?$/,'');
   let db_path = target_folder.replace("./public/","");
-  request_image.get({url: image_url, encoding: 'binary'}, (err,res) => {
-    if(res.statusCode){
-      fs.writeFile(`${target_folder}/${filename}`, res.body, 'binary', (e) => {
-        if(e){
-          console.log('error')
-        }else{
-          Photo.findOrCreate({
-            where:{
-              name: filename,
-              path: `${db_path}/${filename}`,
-              label: 'ptt_beauty'
-            }
-          }).spread((learn_word, created) => {
-            return learn_word.get({plain: true})
-          });
-        }
-      })
-      // console.log(`download: ${target_folder}/${filename}`)
+
+  let _img = imageMagick(request_image.get({url: image_url}));
+  _img.resize(1024, 1024, '>').write(`${target_folder}/${filename}`, function (err) {
+    if(err){
+      console.log(err)
     }else{
-      console.log(`failed download: ${target_folder}/${filename}`)
-    };
+      Photo.findOrCreate({
+        where:{
+          name: filename,
+          path: `${db_path}/${filename}`,
+          previewPath: `${db_path}/preview_${filename}`,
+          label: 'ptt_beauty'
+        }
+      }).spread((photo, created) => {
+        return photo.get({plain: true})
+      });
+      console.log(`download: ${target_folder}/${filename}`)
+    }
   })
+
+  _img.resize(240, 240, '>').write(`${target_folder}/preview_${filename}`, function (err) {
+    if(err){
+      console.log(err)
+    }else{
+      console.log(`create_preview: ${target_folder}/preview_${filename}`)
+    }
+  });
 }
 
 function createFolder(path, __callback){
@@ -196,8 +203,8 @@ function formatPttDate(_date){
   return parseInt(`${month}${date}`)
 }
 
-// let default_url = `${BASE_URL}/bbs/beauty/index.html`
-// downloadBeauty(default_url);
+let default_url = `${BASE_URL}/bbs/beauty/index.html`
+downloadBeauty(default_url);
 
 
-module.exports = downloadBeauty;
+// module.exports = downloadBeauty;
