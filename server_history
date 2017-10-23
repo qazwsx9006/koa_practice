@@ -74,3 +74,43 @@ ubuntu 16.04
   因為我不想用 config.json 記錄 資料庫設定。我想用 config/database.json 來記錄資料設定。
   因此指令最後要指定 config 檔案
   $ node_modules/.bin/sequelize db:migrate --config config/database.json
+
+10. 因為使用的雲端主機ram 只有512M 所以跑部分軟體可能會因為記憶體不足crash,
+    在使用mysql 時，預設配置是 mysql 獨立安裝在 512M的機器上。所以我的機器在做mysql 的大量操作容易crash，
+    因為很少會做大量的操作，所以不打算升級主機。
+    再不改變大量操作(變成小量多次操作？)的前提下，主要可以嘗試的方向有兩個 ：
+    一，調整mysql.cnf ，使其可以不要使用到這麼大量的記憶體。
+    二，使用虛擬記憶體 swap來解決
+    以下操作記錄已 ubuntu 16.04 為例
+    // 查看目前系統配置的 memory & swap 狀態
+    $ free -m
+    // 如果看到swap的 total 值為0, 表示沒有啟用 swap。
+    // 接下來指令皆需要 sudo 權限
+    // 進入 sudo 權限
+    $ sudo su
+    // 將虛擬記憶體位置指定在 /var/swapfile
+    // 並且使用chmod 確保檔案只能被 root 修改。
+    // 通常swap 大小會設定為 Ram 的 1~2倍
+    $ cd /var
+    $ fallocate -l 1G swapfile
+    $ chmod 600 swapfile
+    // 啟用 swap
+    $ mkswap /var/swapfile
+    $ swapon /var/swapfile
+    // 查看 swap 狀態
+    $ swapon -s
+    // 如果重開機，swap要重新啟動
+    // 輸入以下指令，重開機會自行啟動swap
+    $ echo "/var/swapfile    none    swap    sw    0    0" >> /etc/fstab
+    // swappiness 參數是一個介於0~100的數值，當數值越接近100，代表系統越積極使用Swap，當數值越接近0，系統將會盡量使用RAM。預設值是 60
+    // 查看現在的swappiness數值
+    $ cat /proc/sys/vm/swappiness
+    // 因為是VPS所以不用保留ram，所以修改swappiness數值
+    $ sysctl vm.swappiness=10
+    // 重新開機後 swappiness 值變回預設值，輸入以下指令，重開機後也能保留修改過後的 swappiness值
+    $ echo "vm.swappiness = 10" >> /etc/sysctl.conf
+  <swap參考資料 http://fonger.logdown.com/posts/2015/02/01/setting-swap-for-ubuntu-to-solve-out-of-memory >
+
+
+
+
