@@ -11,6 +11,9 @@ const fs = require('fs');
 const db = require('../models');
 const Photo = db.Photo;
 
+const gm = require('gm');
+const imageMagick = gm.subClass({imageMagick: true});
+
 async function getBeauties(target_url){
   console.log(target_url);
   try{
@@ -97,7 +100,7 @@ async function getArticle(target_url){
 }
 
 async function downloadBeauty(target_url, loop_count){
-  let ptt_beauty = await getBeauties(target_url);
+  var ptt_beauty = await getBeauties(target_url);
   let articles = ptt_beauty.articles;
   let d = getYesterdaysDate();
   let folder_name = `./public/images/${d.getFullYear()}${d.getMonth()+1}${d.getDate()}`;
@@ -106,56 +109,68 @@ async function downloadBeauty(target_url, loop_count){
   if(!loop_count){
     loop_count = 0;
   }
-
-  for(i in articles){
-    let target_folder = `${folder_name}/${loop_count}`
-    let article = articles[i]
-    let image_urls = await getArticle(article.url)
-    if(image_urls.length < 1) continue;
-
-    createFolder(target_folder, (folder) => {
-      fs.writeFile(`${folder}/_info.txt`, JSON.stringify(article, null, 2), (e) => {
-        console.log(`write ${article.title} _info.txt`)
-      })
-    });
-    for(_i in image_urls){
-      let image_url = image_urls[_i]
-      downloadImage(image_url, target_folder)
-    }
-    loop_count += 1;
-  }
-
-  if(ptt_beauty.prev_url){
-    console.log('ptt_beauty.prev_url', `${BASE_URL}${ptt_beauty.prev_url}`);
-    downloadBeauty(`${BASE_URL}${ptt_beauty.prev_url}`, loop_count)
-  }
+// articles 也要用 callback next方式完成
+  articlesImages(articles, loop_count, folder_name, (loop_count) => {
+    if(ptt_beauty.prev_url){
+      downloadBeauty(`${BASE_URL}${ptt_beauty.prev_url}`, loop_count)
+    }else{
+      console.log('finished')
+    };
+  })
 
 }
 
-function downloadImage(image_url, target_folder){
+async function articlesImages(articles, loop_count, folder_name, __callback){
+  if(articles.length < 1){
+    __callback(loop_count);
+    return
+  }
+  let target_folder = `${folder_name}/${loop_count}`
+  let article = articles.pop();
+
+  let image_urls = await getArticle(article.url)
+  if(image_urls.length < 1){
+    articlesImages(articles, loop_count, folder_name)
+  }else{
+    createFolder(target_folder, (folder) => {
+      fs.writeFileSync(`${folder}/_info.txt`, JSON.stringify(article, null, 2))
+    });
+    downloadImage(image_urls, target_folder, (e) => {
+      loop_count += 1
+      articlesImages(articles, loop_count, folder_name, __callback)
+    })
+  };
+}
+
+function downloadImage(image_urls, target_folder, _callback){
+  let image_url = image_urls.pop();
   let filename = image_url.substring(image_url.lastIndexOf('/')+1).replace(/((\?|#).*)?$/,'');
   let db_path = target_folder.replace("./public/","");
+
   request_image.get({url: image_url, encoding: 'binary'}, (err,res) => {
     if(res.statusCode){
-      fs.writeFile(`${target_folder}/${filename}`, res.body, 'binary', (e) => {
-        if(e){
-          console.log('error')
-        }else{
-          Photo.findOrCreate({
-            where:{
+      fs.writeFileSync(`${target_folder}/${filename}`, res.body, 'binary')
+      imageMagick(`${target_folder}/${filename}`)
+      .resize(240,240, '>')
+      .write(`${target_folder}/preview_${filename}`, (e) => {
+        if (!err){
+          Photo.create({
               name: filename,
               path: `${db_path}/${filename}`,
               previewPath: `${db_path}/preview_${filename}`,
               label: 'ptt_beauty'
+          }).then((e) => {
+            if(image_urls.length > 0){
+              downloadImage(image_urls, target_folder, _callback);
+            }else{
+              _callback();
             }
-          }).spread((photo, created) => {
-            return photo.get({plain: true})
-          });
+          })
         }
-      })
+      });
       // console.log(`download: ${target_folder}/${filename}`)
     }else{
-      console.log(`failed download: ${target_folder}/${filename}`)
+      // console.log(`failed download: ${target_folder}/${filename}`)
     };
   })
 }
@@ -198,6 +213,5 @@ function formatPttDate(_date){
 
 // let default_url = `${BASE_URL}/bbs/beauty/index.html`
 // downloadBeauty(default_url);
-
 
 module.exports = downloadBeauty;
