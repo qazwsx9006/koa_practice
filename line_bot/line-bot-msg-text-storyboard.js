@@ -98,10 +98,24 @@ module.exports = {
             type: 'uri',
             label: '推薦貼圖巨人雞腳',
             uri: 'https://store.line.me/stickershop/product/1510246/zh-Hant'
-          },
+          }
+        ]
+      }
+    }
+  },
+  test_datetime_picker:{
+    regexp: /^M日期/,
+    reply:{
+      type: 'template',
+      altText: 'Mingyu日期',
+      template: {
+        type: 'datetimepicker',
+        title: 'Mingyu 日期',
+        text: '請選擇',
+        actions: [
           {
             type: 'datetimepicker',
-            lebel: '時間選擇器',
+            lebel: 'picker',
             data: 'schdeule=2017&notify=true',
             mode: 'datetime',
             initial: '2017-10-28T06:15',
