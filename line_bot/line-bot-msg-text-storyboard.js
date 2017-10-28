@@ -98,6 +98,15 @@ module.exports = {
             type: 'uri',
             label: '推薦貼圖巨人雞腳',
             uri: 'https://store.line.me/stickershop/product/1510246/zh-Hant'
+          },
+          {
+            type: 'datetimepicker',
+            lebel: '時間選擇器',
+            data: 'schdeule=2017&notify=true',
+            mode: 'datetime',
+            initial: '2017-10-28T06:15',
+            max: '2017-12-18T14:15',
+            min: '2017-10-01T06:15'
           }
         ]
       }
@@ -126,6 +135,17 @@ module.exports = {
       }
     }
   },
+  test_location:{
+    regexp: /^M位置/i,
+    reply: {
+      type: 'location',
+      title: 'my location!!',
+      address: '〒150-0002 東京都渋谷区渋谷２丁目２１−１',
+      latitude: 35.65910807942215,
+      longitude: 139.70372892916203
+    }
+  },
+
   learn_word:{
     regexp: /^MY\s*;([^;]+);(.+)/i,
     group: {
