@@ -109,13 +109,13 @@ module.exports = {
       type: 'template',
       altText: 'Mingyu日期',
       template: {
-        type: 'datetimepicker',
+        type: 'buttons',
         title: 'Mingyu 日期',
         text: '請選擇',
         actions: [
           {
             type: 'datetimepicker',
-            lebel: 'picker',
+            label: 'picker',
             data: 'schdeule=2017&notify=true',
             mode: 'datetime',
             initial: '2017-10-28T06:15',

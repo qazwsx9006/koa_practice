@@ -130,7 +130,7 @@ async function articlesImages(articles, loop_count, folder_name, __callback){
 
   let image_urls = await getArticle(article.url)
   if(image_urls.length < 1){
-    articlesImages(articles, loop_count, folder_name)
+    articlesImages(articles, loop_count, folder_name, __callback)
   }else{
     createFolder(target_folder, (folder) => {
       fs.writeFileSync(`${folder}/_info.txt`, JSON.stringify(article, null, 2))
