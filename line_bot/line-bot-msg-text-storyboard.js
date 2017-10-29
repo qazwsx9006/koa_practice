@@ -172,6 +172,10 @@ module.exports = {
   ptt_beauty:{
     regexp: /^M表特$/i,
     ptt_beauty_actions: true
+  },
+  dcard:{
+    regexp: /^M西施$/i,
+    dcard_actions: true
   }
 }
 

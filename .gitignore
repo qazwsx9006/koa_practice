@@ -3,3 +3,4 @@ config.js
 config.json
 database.json
 public
+dcard.js

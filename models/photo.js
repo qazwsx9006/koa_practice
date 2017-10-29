@@ -4,7 +4,8 @@ module.exports = (sequelize, DataTypes) => {
     name: DataTypes.STRING,
     path: DataTypes.TEXT,
     previewPath: DataTypes.TEXT,
-    label: DataTypes.STRING
+    label: DataTypes.STRING,
+    topic_id: DataTypes.STRING
   }, {
     classMethods: {
       associate: function(models) {

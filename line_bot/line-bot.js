@@ -231,6 +231,9 @@ class LineAction {
         // 表特
         if(actions.ptt_beauty_actions){
           Photo.find({
+            where: {
+              label: 'ptt_beauty'
+            },
             order: [Sequelize.fn('RAND')]
           }).then((image) => {
             let img = image.get();
@@ -245,6 +248,27 @@ class LineAction {
 
         }
         // 表特
+
+        // 西施
+        if(actions.dcard_actions){
+          Photo.find({
+            where: {
+              label: 'dcard_sex'
+            },
+            order: [Sequelize.fn('RAND')]
+          }).then((image) => {
+            let img = image.get();
+            let img_url = `https://mingyu.bonimages.tw/${img.path}`
+            let preview_img_url = `https://mingyu.bonimages.tw/${img.previewPath}`
+            client.replyMessage(this.event.replyToken, {
+              type: 'image',
+              originalContentUrl: img_url,
+              previewImageUrl: preview_img_url
+            });
+          })
+
+        }
+        // 西施
 
         break;
       }
