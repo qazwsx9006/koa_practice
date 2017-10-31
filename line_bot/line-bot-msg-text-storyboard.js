@@ -176,6 +176,35 @@ module.exports = {
   dcard:{
     regexp: /^M西施$/i,
     dcard_actions: true
+  },
+  test_gods:{
+    regexp: /^M神人/,
+    reply:{
+      type: 'template',
+      altText: '神人們介紹',
+      template: {
+        type: 'buttons',
+        title: '神人們介紹',
+        text: '你想認識哪位神人呢？',
+        actions: [
+          {
+            type: 'message',
+            label: 'Boss',
+            text: 'Boss'
+          },
+          {
+            type: 'message',
+            label: '林賢中出',
+            text: '中出'
+          },
+          {
+            type: 'message',
+            label: '悄悄神',
+            text: '靜悄悄'
+          }
+        ]
+      }
+    }
   }
 }
 
