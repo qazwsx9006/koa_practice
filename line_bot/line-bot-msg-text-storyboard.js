@@ -177,6 +177,10 @@ module.exports = {
     regexp: /^M西施$/i,
     dcard_actions: true
   },
+  fb_beauty:{
+    regexp: /^M真表特$/i,
+    fb_beauty_actions: true
+  },
   test_gods:{
     regexp: /^M神人/,
     reply:{
