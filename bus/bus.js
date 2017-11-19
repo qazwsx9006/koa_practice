@@ -1,9 +1,9 @@
 const cheerio = require("cheerio");
 const request_promise = require('request-promise');
-const tp_bus_route = require('./bus/GetRoute.json');
-const ntp_bus_route = require('./bus/busRouteNtp.json');
-const tp_bus_stop = require('./bus/GetStop.json');
-const ntp_bus_stop = require('./bus/busStopNtp.json');
+const tp_bus_route = require('./GetRoute.json');
+const ntp_bus_route = require('./busRouteNtp.json');
+const tp_bus_stop = require('./GetStop.json');
+const ntp_bus_stop = require('./busStopNtp.json');
 
 const bus_time_tp_url = 'http://www.e-bus.taipei.gov.tw/newmap/Js/RouteInfo'
 const bus_time_ntp_url = 'http://routes.5284.com.tw/ntpcebus/Js/RouteInfo'

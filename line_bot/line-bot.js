@@ -5,6 +5,7 @@ const Sequelize = require('sequelize');
 const db = require('../models');
 const User = db.User;
 const Photo = db.Photo;
+const Url = require('url');
 
 // story
 const storyboard = require('./line-bot-msg-text-storyboard');
@@ -90,6 +91,16 @@ class LineAction {
         break;
       case 'postback':
         console.log(JSON.stringify(event));
+        var postback_data = this.event.replyToken.postback.data
+        params = Url.parse(postback_data, true)
+
+        if(params.postback_type == 'bus'){
+          console.log(params)
+          console.log('bus reply here')
+        }
+
+        // {"type":"postback","replyToken":"d9abf1266ade4a818288b20f676ef773","source":{"userId":"Ue04d53f5900105d53b7254e5860d1a38","type":"user"},"timestamp":1511089059267,"postback":{"data":"bus_name=277&sec=0"}}
+
 
         client.replyMessage(this.event.replyToken, {
           type: 'text',
@@ -306,12 +317,12 @@ class LineAction {
                 {
                   type: 'postback',
                   label: `${bus_name}去程`,
-                  data: `bus_name=${bus_name}&sec=0`
+                  data: `?postback_type=bus&bus_name=${bus_name}&sec=0`
                 },
                 {
                   type: 'postback',
                   label: `${bus_name}返程`,
-                  data: `bus_name=${bus_name}&sec=1`
+                  data: `?postback_type=bus&bus_name=${bus_name}&sec=1`
                 }
               ]
             }
