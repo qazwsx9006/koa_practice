@@ -127,6 +127,7 @@ class LineAction {
     let message = event.message;
     let msg_txt = message.text.trim();
     let source_type = event.source.type;
+    console.log(message)
     var cmd_msg = false;
     for(var key in storyboard) {
       let actions = storyboard[key];
@@ -293,6 +294,7 @@ class LineAction {
 
         // bus
         if(actions.bus_actions){
+          console.log('bus here')
           let bus_name = msg_txt.match(actions.regexp)[1].trim();
           client.replyMessage(this.event.replyToken, {
             type: 'template',
@@ -318,9 +320,6 @@ class LineAction {
 
         }
         // bus
-
-
-        bus_action
 
         break;
       }

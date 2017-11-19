@@ -66,4 +66,4 @@ async function fetchTaipeiBus(tmp_arr){
 
 }
 let tmp_arr = [{url: tp_bus_info_url, name: 'GetStop'},{url: tp_bus_routes_url, name: 'GetRoute'}]
-// fetchTaipeiBus(tmp_arr);
+fetchTaipeiBus(tmp_arr);
