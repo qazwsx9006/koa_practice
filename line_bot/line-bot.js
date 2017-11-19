@@ -127,7 +127,6 @@ class LineAction {
     let message = event.message;
     let msg_txt = message.text.trim();
     let source_type = event.source.type;
-    console.log(message)
     var cmd_msg = false;
     for(var key in storyboard) {
       let actions = storyboard[key];
@@ -293,7 +292,7 @@ class LineAction {
         // 真表特(facebook)
 
         // bus
-        if(actions.bus_actions){
+        if(actions.bus_action){
           console.log('bus here')
           let bus_name = msg_txt.match(actions.regexp)[1].trim();
           client.replyMessage(this.event.replyToken, {
