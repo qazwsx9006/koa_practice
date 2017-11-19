@@ -291,6 +291,37 @@ class LineAction {
         }
         // 真表特(facebook)
 
+        // bus
+        if(actions.bus_actions){
+          let bus_name = msg_txt.match(actions.regexp)[1].trim();
+          client.replyMessage(this.event.replyToken, {
+            type: 'template',
+            altText: 'Mingyu公車小幫手',
+            template: {
+              type: 'buttons',
+              title: 'Mingyu 公車小幫手',
+              text: `要查詢${bus_name}的哪個方向？`,
+              actions: [
+                {
+                  type: 'postback',
+                  label: `${bus_name}去程`,
+                  data: `bus_name=${bus_name}&sec=0`
+                },
+                {
+                  type: 'postback',
+                  label: `${bus_name}返程`,
+                  data: `bus_name=${bus_name}&sec=1`
+                }
+              ]
+            }
+          });
+
+        }
+        // bus
+
+
+        bus_action
+
         break;
       }
     }

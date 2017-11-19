@@ -4,3 +4,8 @@ config.json
 database.json
 public
 dcard.js
+
+busRouteNtp.json
+busStopNtp.json
+GetRoute*
+GetStop*

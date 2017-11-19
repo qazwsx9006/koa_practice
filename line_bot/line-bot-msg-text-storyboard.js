@@ -46,6 +46,10 @@ module.exports = {
     regexp: /^M天氣(宜蘭縣|桃園市|新竹縣|苗栗縣|彰化縣|南投縣|雲林縣|嘉義縣|屏東縣|[臺台]{1}東縣|花蓮縣|澎湖縣|基隆市|新竹市|嘉義市|[臺台]{1}北市|高雄市|新北市|[臺台]{1}中市|[臺台]{1}南市|連江縣|金門縣)?/,
     weather_action: true
   },
+  bus:{
+    regexp: /^M公車(.*)?/,
+    bus_action: true
+  },
   caculator:{
     regexp: /^([\.\s\d\(\)\*\+\-\/]{3,})\=?$/,
     caculator_action: true
