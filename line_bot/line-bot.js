@@ -19,6 +19,8 @@ const astrology_fetch = require('./astrology');
 const ptt_articles = require('./ptt');
 // learn_word
 const learn_word = require('./learn_word');
+// bus
+const bus_infos = require('../bus/bus');
 
 class LineAction {
   constructor(event) {
@@ -91,16 +93,13 @@ class LineAction {
         break;
       case 'postback':
         console.log(JSON.stringify(event));
-        var postback_data = this.event.replyToken.postback.data
-        params = Url.parse(postback_data, true)
+        var postback_data = this.event.postback.data
+        var params = Url.parse(postback_data, true).query
 
         if(params.postback_type == 'bus'){
-          console.log(params)
-          console.log('bus reply here')
+          this.replyBus(params)
+          break;
         }
-
-        // {"type":"postback","replyToken":"d9abf1266ade4a818288b20f676ef773","source":{"userId":"Ue04d53f5900105d53b7254e5860d1a38","type":"user"},"timestamp":1511089059267,"postback":{"data":"bus_name=277&sec=0"}}
-
 
         client.replyMessage(this.event.replyToken, {
           type: 'text',
@@ -491,6 +490,24 @@ class LineAction {
       text: learnWord.reply
     });
   }
+
+  // bus
+  async replyBus(params){
+    try{
+      let bus_times = await bus_infos(params.bus_name, parseInt(params.sec));
+      client.replyMessage(this.event.replyToken, {
+        type: 'text',
+        text: `[${bus_times.title}]\n${bus_times.bus_stop_times.join("\n")}`
+      });
+    }
+    catch(e){
+      client.replyMessage(this.event.replyToken, {
+        type: 'text',
+        text: `該公車路線不存在，或是資料庫忙碌(稍後再試)。`
+      });
+    }
+  }
+
 
 }
 
