@@ -5,6 +5,7 @@ const Sequelize = require('sequelize');
 const db = require('../models');
 const User = db.User;
 const Photo = db.Photo;
+const Url = require('url');
 
 // story
 const storyboard = require('./line-bot-msg-text-storyboard');
@@ -18,6 +19,8 @@ const astrology_fetch = require('./astrology');
 const ptt_articles = require('./ptt');
 // learn_word
 const learn_word = require('./learn_word');
+// bus
+const bus_infos = require('../bus/bus');
 
 class LineAction {
   constructor(event) {
@@ -90,6 +93,13 @@ class LineAction {
         break;
       case 'postback':
         console.log(JSON.stringify(event));
+        var postback_data = this.event.postback.data
+        var params = Url.parse(postback_data, true).query
+
+        if(params.postback_type == 'bus'){
+          this.replyBus(params)
+          break;
+        }
 
         client.replyMessage(this.event.replyToken, {
           type: 'text',
@@ -291,6 +301,35 @@ class LineAction {
         }
         // 真表特(facebook)
 
+        // bus
+        if(actions.bus_action){
+          console.log('bus here')
+          let bus_name = msg_txt.match(actions.regexp)[1].trim();
+          client.replyMessage(this.event.replyToken, {
+            type: 'template',
+            altText: 'Mingyu公車小幫手',
+            template: {
+              type: 'buttons',
+              title: 'Mingyu 公車小幫手',
+              text: `要查詢${bus_name}的哪個方向？`,
+              actions: [
+                {
+                  type: 'postback',
+                  label: `${bus_name}去程`,
+                  data: `?postback_type=bus&bus_name=${bus_name}&sec=0`
+                },
+                {
+                  type: 'postback',
+                  label: `${bus_name}返程`,
+                  data: `?postback_type=bus&bus_name=${bus_name}&sec=1`
+                }
+              ]
+            }
+          });
+
+        }
+        // bus
+
         break;
       }
     }
@@ -451,6 +490,24 @@ class LineAction {
       text: learnWord.reply
     });
   }
+
+  // bus
+  async replyBus(params){
+    try{
+      let bus_times = await bus_infos(params.bus_name, parseInt(params.sec));
+      client.replyMessage(this.event.replyToken, {
+        type: 'text',
+        text: `[${bus_times.title}]\n${bus_times.bus_stop_times.join("\n")}`
+      });
+    }
+    catch(e){
+      client.replyMessage(this.event.replyToken, {
+        type: 'text',
+        text: `該公車路線不存在，或是資料庫忙碌(稍後再試)。`
+      });
+    }
+  }
+
 
 }
 

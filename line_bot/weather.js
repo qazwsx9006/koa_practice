@@ -21,6 +21,7 @@ async function getWeather(placeName){
 }
 
 function convertUnit(elemName, parameter){
+  if(!parameter)return;
   switch(elemName){
     case 'Wx':
       return `${parameter.parameterName}`;
