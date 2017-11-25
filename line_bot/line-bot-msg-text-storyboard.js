@@ -12,7 +12,6 @@ module.exports = {
       type: 'text',
       text: "Hi 我是 MingyuBot, 我的指令目前有\n1. Hi,\n2. MingyuBot\n3. Mingyu bye\n4. M天氣\n5, M吃飯\n6. M運勢"
     }
-
   },
   leave:{
     regexp: /^Mingyu bye/i,
@@ -40,6 +39,13 @@ module.exports = {
     reply: {
       type: 'text',
       text: ['炸雞','漢堡','煎餃','切仔麵','拉麵','關東煮','水餃','便當','三明治','美式早午餐','西式排餐', '肉包', 'Pizza', '丼飯', '隨便啦！']
+    }
+  }
+  dice:{
+    regexp: /^🎲$/,
+    reply: {
+      type: 'text',
+      text: ['1️⃣','2️⃣','3️⃣','4️⃣','5️⃣','6️⃣']
     }
   },
   weather:{
