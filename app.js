@@ -12,6 +12,7 @@ const static_serve = require('koa-static');
 const line = require('@line/bot-sdk');
 const config = require('./config/config');
 const LineAction = require('./line_bot/line-bot');
+const sendToMe = require('./line_bot/send_to_me');
 // line bot
 
 const app = new Koa();
@@ -67,6 +68,32 @@ router.post('/webhook' , async(ctx) => {
 
   line_action = new LineAction(event);
   result = line_action.eventTypeAction()
+
+  // client.pushMessage(userId, { type: 'text', text: 'hello, world' });
+  ctx.body = 'success'
+});
+
+
+// middleware for verify request
+router.use('/pushToMe', async(ctx, next) => {
+  let res = ctx.request;
+  let params = res.body;
+  
+console.log(params)
+  if(params.validate == config.pushMeValidateCode){
+    ctx.status = 200;
+    next();
+  }else{
+    ctx.body = 'Unauthorized! Channel Serect and Request header aren\'t the same.';
+    ctx.status = 401;
+  }
+});
+
+router.post('/pushToMe' , async(ctx) => {
+  let res = ctx.request;
+  let params = res.body;
+console.log('/pushToMe!!')
+  sendToMe(params)
 
   // client.pushMessage(userId, { type: 'text', text: 'hello, world' });
   ctx.body = 'success'

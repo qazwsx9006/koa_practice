@@ -7,5 +7,8 @@ module.exports = {
   SSL:{
     key: '/etc/letsencrypt/live/$your-domain/privkey.pem',
     cert: '/etc/letsencrypt/live/$your-domain/fullchain.pem'
-  }
+  },
+  AstrologyUrl: 'url',
+  pushMeValidateCode: 'code',
+  MeId: 'id'
 }
