@@ -78,8 +78,7 @@ router.post('/webhook' , async(ctx) => {
 router.use('/pushToMe', async(ctx, next) => {
   let res = ctx.request;
   let params = res.body;
-  
-console.log(params)
+
   if(params.validate == config.pushMeValidateCode){
     ctx.status = 200;
     next();
@@ -92,7 +91,7 @@ console.log(params)
 router.post('/pushToMe' , async(ctx) => {
   let res = ctx.request;
   let params = res.body;
-console.log('/pushToMe!!')
+
   sendToMe(params)
 
   // client.pushMessage(userId, { type: 'text', text: 'hello, world' });

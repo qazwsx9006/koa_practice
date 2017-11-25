@@ -20,3 +20,6 @@ function formatMsgs(message){
 }
 
 module.exports = sendToMe;
+
+// $curl test
+// curl -v -X POST "domain" -d "validate=123&messages=msg_here!"
