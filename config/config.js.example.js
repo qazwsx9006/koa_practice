@@ -10,5 +10,7 @@ module.exports = {
   },
   AstrologyUrl: 'url',
   pushMeValidateCode: 'code',
-  MeId: 'id'
+  MeId: 'id',
+  mqttUrl: 'mqtt://domain.com',
+  topic: 'subscribe_topic'
 }

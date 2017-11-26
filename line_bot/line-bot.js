@@ -21,6 +21,8 @@ const ptt_articles = require('./ptt');
 const learn_word = require('./learn_word');
 // bus
 const bus_infos = require('../bus/bus');
+// mqtt
+const mqtt = require('./mqtt');
 
 class LineAction {
   constructor(event) {
@@ -341,6 +343,9 @@ class LineAction {
     if(!cmd_msg && source_type === 'group'){
       let g_id = event.source.groupId;
       this.replyLearnWord(g_id, msg_txt.trim(), 'group')
+    }
+    if(!cmd_msg && source_type === 'user' && event.source.userId == config.MeId){
+      if(msg_txt.match(/^http/i)) mqtt.sentMqttToMe(msg_txt);
     }
   }
 
