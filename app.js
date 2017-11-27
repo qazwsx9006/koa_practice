@@ -13,6 +13,7 @@ const line = require('@line/bot-sdk');
 const config = require('./config/config');
 const LineAction = require('./line_bot/line-bot');
 const sendToMe = require('./line_bot/send_to_me');
+const sendTo = require('./line_bot/send_to');
 // line bot
 
 const app = new Koa();
@@ -98,6 +99,29 @@ router.post('/pushToMe' , async(ctx) => {
   ctx.body = 'success'
 });
 
+// middleware for verify request
+router.use('/pushTo', async(ctx, next) => {
+  let res = ctx.request;
+  let params = res.body;
+
+  if(params.validate == config.pushMeValidateCode && params.pushId){
+    ctx.status = 200;
+    next();
+  }else{
+    ctx.body = 'Unauthorized! Channel Serect and Request header aren\'t the same.';
+    ctx.status = 401;
+  }
+});
+
+router.post('/pushTo' , async(ctx) => {
+  let res = ctx.request;
+  let params = res.body;
+
+  sendTo(params)
+
+  // client.pushMessage(userId, { type: 'text', text: 'hello, world' });
+  ctx.body = 'success'
+});
 
 // 以下順序有關聯，順序不同可能造成錯誤
 app.use(logger());
