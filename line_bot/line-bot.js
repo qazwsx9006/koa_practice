@@ -305,8 +305,8 @@ class LineAction {
 
         // bus
         if(actions.bus_action){
-          console.log('bus here')
           let bus_name = msg_txt.match(actions.regexp)[1].trim();
+          
           client.replyMessage(this.event.replyToken, {
             type: 'template',
             altText: 'Mingyu公車小幫手',
@@ -345,7 +345,8 @@ class LineAction {
       this.replyLearnWord(g_id, msg_txt.trim(), 'group')
     }
     if(!cmd_msg && source_type === 'user' && event.source.userId == config.MeId){
-      if(msg_txt.match(/^http/i)) mqtt_action(msg_txt);
+      mqtt_action(msg_txt);
+      // if(msg_txt.match(/^MA/i)) 
     }
   }
 
