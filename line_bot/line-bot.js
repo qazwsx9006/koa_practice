@@ -140,6 +140,16 @@ class LineAction {
     let msg_txt = message.text.trim();
     let source_type = event.source.type;
     var cmd_msg = false;
+
+    if(msg_txt == '蟻人' || msg_txt == '防雷'){
+      for(i=0; i<10;i++){
+        client.replyMessage(this.event.replyToken, {
+          type: 'text',
+          text: '防雷頁'
+        }); 
+      }
+      return
+    }
     for(var key in storyboard) {
       let actions = storyboard[key];
       if(msg_txt.match(actions.regexp)){
